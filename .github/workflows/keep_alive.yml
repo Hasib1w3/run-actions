@@ -1,0 +1,53 @@
+name: Keep Spaces Alive
+
+on:
+  # Schedule to run every 10 hours
+  schedule:
+    - cron: "0 */10 * * *"
+  # Allow manual trigger for testing
+  workflow_dispatch:
+
+jobs:
+  ping_spaces:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Health Endpoints
+        env:
+          # ----------------------------------------------------------
+          # CONFIGURATION: Add your Space URLs below.
+          # You can add as many as you want, separated by spaces or newlines.
+          # ----------------------------------------------------------
+          URLS: >
+            https://hasibxx2x-siteclone.hf.space/health
+            https://hasibxx2x-gemini.hf.space/health
+            https://hasibxx2x-inspiration.hf.space/health
+        run: |
+          echo "Starting health checks..."
+          error_found=0
+          
+          # Convert newline separated string to array
+          for url in $URLS; do
+            echo "----------------------------------------"
+            echo "Target: $url"
+            
+            # Curl command breakdown:
+            # -s: Silent mode
+            # -o /dev/null: Discard output body
+            # -w "%{http_code}": Output only the status code
+            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+            
+            if [ "$STATUS_CODE" -eq 200 ]; then
+              echo "✅ Success (Status: 200)"
+            else
+              echo "❌ Failed (Status: $STATUS_CODE)"
+              error_found=1
+            fi
+          done
+          
+          echo "----------------------------------------"
+          if [ $error_found -eq 1 ]; then
+            echo "⚠️  One or more spaces failed the health check."
+            exit 1
+          else
+            echo "🎉 All spaces are healthy!"
+          fi
