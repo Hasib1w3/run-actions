@@ -21,6 +21,10 @@ jobs:
             https://hasibxx2x-siteclone.hf.space/health
             https://hasibxx2x-gemini.hf.space/health
             https://hasibxx2x-inspiration.hf.space/health
+
+            https://hasibxx2x-api.hf.space/health
+            https://hasibxx2x-api1.hf.space/health
+            https://hasibxx2x-api2.hf.space/health
         run: |
           echo "Starting health checks..."
           error_found=0
