@@ -11,17 +11,16 @@ jobs:
   ping_spaces:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Health Endpoints
+      # --------------------------------------------------------------------------
+      # STEP 1: Standard Health Checks (GET Requests)
+      # --------------------------------------------------------------------------
+      - name: Check Health Endpoints (GET)
         env:
-          # ----------------------------------------------------------
-          # CONFIGURATION: Add your Space URLs below.
-          # You can add as many as you want, separated by spaces or newlines.
-          # ----------------------------------------------------------
+          # Configuration for simple health checks
           URLS: >
             https://hasibxx2x-siteclone.hf.space/health
             https://hasibxx2x-gemini.hf.space/health
             https://hasibxx2x-inspiration.hf.space/health
-
             https://hasibxx2x-api.hf.space/health
             https://hasibxx2x-api1.hf.space/health
             https://hasibxx2x-api2.hf.space/health
@@ -29,16 +28,10 @@ jobs:
           echo "Starting health checks..."
           error_found=0
           
-          # Convert newline separated string to array
           for url in $URLS; do
-            echo "----------------------------------------"
             echo "Target: $url"
-            
-            # Curl command breakdown:
-            # -s: Silent mode
-            # -o /dev/null: Discard output body
-            # -w "%{http_code}": Output only the status code
-            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+            # 10 second timeout for health checks
+            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$url")
             
             if [ "$STATUS_CODE" -eq 200 ]; then
               echo "✅ Success (Status: 200)"
@@ -46,12 +39,97 @@ jobs:
               echo "❌ Failed (Status: $STATUS_CODE)"
               error_found=1
             fi
+            echo "----------------------------------------"
           done
-          
-          echo "----------------------------------------"
+
           if [ $error_found -eq 1 ]; then
-            echo "⚠️  One or more spaces failed the health check."
+            echo "⚠️  One or more spaces failed health checks."
+            # We don't exit here so the POST requests below can still run
+          fi
+
+      # --------------------------------------------------------------------------
+      # STEP 2: POST Requests (Generations/Actions)
+      # --------------------------------------------------------------------------
+      - name: Run POST Generators
+        env:
+          # ⚠ IMPORTANT: Use the pipe symbol '|' below to preserve newlines
+          # Format:
+          # Link starting with http...
+          # { The JSON Body }
+          POST_CONFIG: |
+            https://hasibxx2x-gemini.hf.space/generate
+            {
+              "user_prompt": "hi",
+              "system_prompt": "helpful assistant ",
+              "config": "auto"
+            }
+            
+        run: |
+          echo "Starting POST requests..."
+          
+          # Initialize variables
+          CURRENT_URL=""
+          JSON_BUFFER=""
+          ERROR_FOUND=0
+          
+          # Function to execute the curl command
+          execute_post() {
+            if [ -n "$CURRENT_URL" ]; then
+              echo "👉 Triggering: $CURRENT_URL"
+              
+              # Write JSON buffer to a temp file to handle quotes safely
+              echo "$JSON_BUFFER" > post_body.json
+              
+              # Execute Curl
+              # -X POST: Post request
+              # -d @post_body.json: Send data from file
+              # --max-time 480: Hard timeout of 8 minutes
+              STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+                -H "Content-Type: application/json" \
+                -X POST \
+                -d @post_body.json \
+                --max-time 480 \
+                "$CURRENT_URL")
+
+              if [ "$STATUS_CODE" -eq 200 ]; then
+                echo "✅ Request finished (Status: 200)"
+              else
+                echo "❌ Request failed or timed out (Status: $STATUS_CODE)"
+                echo "   (If status is 000, it likely hit the 8-minute limit)"
+                ERROR_FOUND=1
+              fi
+              echo "----------------------------------------"
+            fi
+          }
+
+          # Loop through the environment variable line by line
+          while IFS= read -r line || [ -n "$line" ]; do
+            # Trim leading/trailing whitespace
+            clean_line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+            
+            # Skip empty lines
+            if [ -z "$clean_line" ]; then continue; fi
+
+            # If line starts with http, it is a new request
+            if [[ "$clean_line" == http* ]]; then
+              # 1. Execute the previous request (if one exists)
+              execute_post
+              
+              # 2. Reset buffers for the new request
+              CURRENT_URL="$clean_line"
+              JSON_BUFFER=""
+            else
+              # It is part of the JSON body
+              JSON_BUFFER+="$line "
+            fi
+          done <<< "$POST_CONFIG"
+
+          # Execute the very last request in the list
+          execute_post
+
+          if [ $ERROR_FOUND -eq 1 ]; then
+            echo "⚠️ Some POST requests failed."
             exit 1
           else
-            echo "🎉 All spaces are healthy!"
+            echo "🎉 All requests completed successfully."
           fi
