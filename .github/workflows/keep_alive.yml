@@ -1,10 +1,8 @@
 name: Keep Spaces Alive
 
 on:
-  # Schedule to run every 10 hours
   schedule:
     - cron: "0 */10 * * *"
-  # Allow manual trigger for testing
   workflow_dispatch:
 
 jobs:
@@ -16,10 +14,8 @@ jobs:
       # --------------------------------------------------------------------------
       - name: Check Health Endpoints (GET)
         env:
-          # Configuration for simple health checks
           URLS: >
             https://hasibxx2x-siteclone.hf.space/health
-            https://hasibxx2x-gemini.hf.space/health
             https://hasibxx2x-inspiration.hf.space/health
             https://hasibxx2x-api.hf.space/health
             https://hasibxx2x-api1.hf.space/health
@@ -30,7 +26,6 @@ jobs:
           
           for url in $URLS; do
             echo "Target: $url"
-            # 10 second timeout for health checks
             STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$url")
             
             if [ "$STATUS_CODE" -eq 200 ]; then
@@ -42,20 +37,13 @@ jobs:
             echo "----------------------------------------"
           done
 
-          if [ $error_found -eq 1 ]; then
-            echo "⚠️  One or more spaces failed health checks."
-            # We don't exit here so the POST requests below can still run
-          fi
-
       # --------------------------------------------------------------------------
-      # STEP 2: POST Requests (Generations/Actions)
+      # STEP 2: POST Requests (Generations/Actions) with Response Logging
       # --------------------------------------------------------------------------
       - name: Run POST Generators
         env:
-          # ⚠ IMPORTANT: Use the pipe symbol '|' below to preserve newlines
-          # Format:
-          # Link starting with http...
-          # { The JSON Body }
+          # ⚠ Add your URLs and JSON bodies here
+          # Use the pipe | to allow multi-line strings
           POST_CONFIG: |
             https://hasibxx2x-gemini.hf.space/generate
             {
@@ -67,24 +55,24 @@ jobs:
         run: |
           echo "Starting POST requests..."
           
-          # Initialize variables
           CURRENT_URL=""
           JSON_BUFFER=""
           ERROR_FOUND=0
           
-          # Function to execute the curl command
           execute_post() {
             if [ -n "$CURRENT_URL" ]; then
               echo "👉 Triggering: $CURRENT_URL"
               
-              # Write JSON buffer to a temp file to handle quotes safely
+              # Save JSON payload to file
               echo "$JSON_BUFFER" > post_body.json
               
+              # Clear previous response file
+              echo "" > response.txt
+              
               # Execute Curl
-              # -X POST: Post request
-              # -d @post_body.json: Send data from file
-              # --max-time 480: Hard timeout of 8 minutes
-              STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+              # -o response.txt: Save the actual response body to this file
+              # -w "%{http_code}": Return only the status code to the variable
+              STATUS_CODE=$(curl -s -o response.txt -w "%{http_code}" \
                 -H "Content-Type: application/json" \
                 -X POST \
                 -d @post_body.json \
@@ -93,38 +81,36 @@ jobs:
 
               if [ "$STATUS_CODE" -eq 200 ]; then
                 echo "✅ Request finished (Status: 200)"
+                echo "📄 API RESPONSE:"
+                echo "----------------------------------------"
+                cat response.txt
+                echo ""
+                echo "----------------------------------------"
               else
                 echo "❌ Request failed or timed out (Status: $STATUS_CODE)"
-                echo "   (If status is 000, it likely hit the 8-minute limit)"
+                echo "📄 ERROR DETAILS / PARTIAL RESPONSE:"
+                cat response.txt
                 ERROR_FOUND=1
               fi
-              echo "----------------------------------------"
             fi
           }
 
-          # Loop through the environment variable line by line
+          # Read config line by line
           while IFS= read -r line || [ -n "$line" ]; do
-            # Trim leading/trailing whitespace
             clean_line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
             
-            # Skip empty lines
             if [ -z "$clean_line" ]; then continue; fi
 
-            # If line starts with http, it is a new request
             if [[ "$clean_line" == http* ]]; then
-              # 1. Execute the previous request (if one exists)
               execute_post
-              
-              # 2. Reset buffers for the new request
               CURRENT_URL="$clean_line"
               JSON_BUFFER=""
             else
-              # It is part of the JSON body
               JSON_BUFFER+="$line "
             fi
           done <<< "$POST_CONFIG"
 
-          # Execute the very last request in the list
+          # Execute final request
           execute_post
 
           if [ $ERROR_FOUND -eq 1 ]; then
