@@ -2,7 +2,7 @@ name: Keep Spaces Alive
 
 on:
   schedule:
-    - cron: "0 */10 * * *"
+    - cron: "0 */10 * * *" # Every 10 hours
   workflow_dispatch:
 
 jobs:
@@ -10,10 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # --------------------------------------------------------------------------
-      # STEP 1: Standard Health Checks (GET Requests)
+      # STEP 1: Standard Health Checks (GET Requests) with AUTH
       # --------------------------------------------------------------------------
       - name: Check Health Endpoints (GET)
         env:
+          # Pull the token from GitHub Secrets
+          HF_TOKEN: ${{ secrets.HF_TOKEN }} 
           URLS: >
             https://hasibxx2x-siteclone.hf.space/health
             https://hasibxx2x-inspiration.hf.space/health
@@ -24,36 +26,51 @@ jobs:
           echo "Starting health checks..."
           error_found=0
           
+          if [ -z "$HF_TOKEN" ]; then
+            echo "❌ Error: HF_TOKEN secret is missing or empty!"
+            exit 1
+          fi
+
           for url in $URLS; do
             echo "Target: $url"
-            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$url")
+            # Added header: -H "Authorization: Bearer $HF_TOKEN"
+            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+              --max-time 10 \
+              -H "Authorization: Bearer $HF_TOKEN" \
+              "$url")
             
             if [ "$STATUS_CODE" -eq 200 ]; then
               echo "✅ Success (Status: 200)"
             else
               echo "❌ Failed (Status: $STATUS_CODE)"
+              # Optional: Don't error out entire workflow for just one fail, 
+              # just mark variable
               error_found=1
             fi
             echo "----------------------------------------"
           done
 
       # --------------------------------------------------------------------------
-      # STEP 2: POST Requests (Generations/Actions) with Response Logging
+      # STEP 2: POST Requests (Generations/Actions) with AUTH & LOGGING
       # --------------------------------------------------------------------------
       - name: Run POST Generators
         env:
-          # ⚠ Add your URLs and JSON bodies here
-          # Use the pipe | to allow multi-line strings
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
           POST_CONFIG: |
             https://hasibxx2x-gemini.hf.space/generate
             {
               "user_prompt": "hi",
-              "system_prompt": "helpful assistant ",
+              "system_prompt": "helpful assistant",
               "config": "auto"
             }
             
         run: |
           echo "Starting POST requests..."
+
+          if [ -z "$HF_TOKEN" ]; then
+            echo "❌ Error: HF_TOKEN secret is missing or empty!"
+            exit 1
+          fi
           
           CURRENT_URL=""
           JSON_BUFFER=""
@@ -69,11 +86,11 @@ jobs:
               # Clear previous response file
               echo "" > response.txt
               
-              # Execute Curl
-              # -o response.txt: Save the actual response body to this file
-              # -w "%{http_code}": Return only the status code to the variable
+              # Execute Curl with Auth
+              # Added: -H "Authorization: Bearer $HF_TOKEN"
               STATUS_CODE=$(curl -s -o response.txt -w "%{http_code}" \
                 -H "Content-Type: application/json" \
+                -H "Authorization: Bearer $HF_TOKEN" \
                 -X POST \
                 -d @post_body.json \
                 --max-time 480 \
@@ -87,8 +104,8 @@ jobs:
                 echo ""
                 echo "----------------------------------------"
               else
-                echo "❌ Request failed or timed out (Status: $STATUS_CODE)"
-                echo "📄 ERROR DETAILS / PARTIAL RESPONSE:"
+                echo "❌ Request failed (Status: $STATUS_CODE)"
+                echo "📄 ERROR DETAILS:"
                 cat response.txt
                 ERROR_FOUND=1
               fi
