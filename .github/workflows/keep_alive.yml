@@ -57,11 +57,11 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           POST_CONFIG: |
-            https://hasibxx2x-gemini.hf.space/generate
+            https://hasibxx2x-gemini2.hf.space/generate
             {
               "user_prompt": "hi",
               "system_prompt": "helpful assistant",
-              "config": "auto"
+              "config": "api"
             }
             
         run: |
