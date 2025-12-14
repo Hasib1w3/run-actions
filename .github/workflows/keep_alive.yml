@@ -14,40 +14,73 @@ jobs:
       # --------------------------------------------------------------------------
       - name: Check Health Endpoints (GET)
         env:
-          # Pull the token from GitHub Secrets
-          HF_TOKEN: ${{ secrets.HF_TOKEN }} 
+          # URL|TOKEN format
           URLS: >
-            https://hasibxx2x-siteclone.hf.space/health
-            https://hasibxx2x-siteclone1.hf.space/health
-            https://hasibxx2x-siteclone2.hf.space/health
-            https://hasibxx2x-inspiration.hf.space/health
-            https://hasibxx2x-inspiration1.hf.space/health
-            https://hasibxx2x-inspiration2.hf.space/health
-            https://hasibxx2x-api.hf.space/health
-            https://hasibxx2x-api1.hf.space/health
-            https://hasibxx2x-api2.hf.space/health
+            https://hasibxx2x-api.hf.space/health|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
+            https://hasibxx2x-api1.hf.space/health|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
+            https://hasibxx2x-api2.hf.space/health|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
+            https://hasibxx2x-api3.hf.space/health|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
+            https://hasibxx2x-api4.hf.space/health|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
+            https://hasibxx2x-api5.hf.space/health|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
+            https://hasibxx2x-api6.hf.space/health|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
+            https://hasibxx2x-api7.hf.space/health|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
+            https://hasibxx2x-api8.hf.space/health|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
+            https://tbhrtgjnr-api.hf.space/health|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
+            https://tbhrtgjnr-api1.hf.space/health|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
+            https://tbhrtgjnr-api2.hf.space/health|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
+            https://tbhrtgjnr-api3.hf.space/health|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
+            https://tbhrtgjnr-api4.hf.space/health|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
+            https://tbhrtgjnr-api5.hf.space/health|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
+            https://tbhrtgjnr-api6.hf.space/health|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
+            https://tbhrtgjnr-api7.hf.space/health|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
+            https://tbhrtgjnr-api8.hf.space/health|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
+            https://bdfbefbh-gemini.hf.space/health|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
+            https://bdfbefbh-gemini1.hf.space/health|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
+            https://bdfbefbh-gemini2.hf.space/health|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
+            https://bdfbefbh-gemini3.hf.space/health|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
+            https://bdfbefbh-gemini4.hf.space/health|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
+            https://bdfbefbh-gemini5.hf.space/health|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
+            https://bdfbefbh-gemini6.hf.space/health|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
+            https://bdfbefbh-gemini7.hf.space/health|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
+            https://bdfbefbh-gemini8.hf.space/health|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
+            https://htyjy6-siteclone.hf.space/health|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
+            https://htyjy6-siteclone1.hf.space/health|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
+            https://htyjy6-siteclone2.hf.space/health|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
+            https://htyjy6-siteclone3.hf.space/health|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
+            https://htyjy6-siteclone4.hf.space/health|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
+            https://htyjy6-siteclone5.hf.space/health|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
+            https://htyjy6-siteclone6.hf.space/health|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
+            https://htyjy6-siteclone7.hf.space/health|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
+            https://htyjy6-siteclone8.hf.space/health|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
+            https://muhammadshahalamsheikh-inspiration.hf.space/health|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
+            https://muhammadshahalamsheikh-inspiration1.hf.space/health|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
+            https://muhammadshahalamsheikh-inspiration2.hf.space/health|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
+            https://muhammadshahalamsheikh-inspiration3.hf.space/health|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
+            https://muhammadshahalamsheikh-inspiration4.hf.space/health|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
+            https://muhammadshahalamsheikh-inspiration5.hf.space/health|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
+            https://muhammadshahalamsheikh-inspiration6.hf.space/health|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
+            https://muhammadshahalamsheikh-inspiration7.hf.space/health|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
+            https://muhammadshahalamsheikh-inspiration8.hf.space/health|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
         run: |
           echo "Starting health checks..."
           error_found=0
           
-          if [ -z "$HF_TOKEN" ]; then
-            echo "❌ Error: HF_TOKEN secret is missing or empty!"
-            exit 1
-          fi
+          for entry in $URLS; do
+            # Split entry into URL and TOKEN using '|' delimiter
+            url="${entry%|*}"
+            token="${entry#*|}"
 
-          for url in $URLS; do
             echo "Target: $url"
-            # Added header: -H "Authorization: Bearer $HF_TOKEN"
             STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
               --max-time 10 \
-              -H "Authorization: Bearer $HF_TOKEN" \
+              -H "Authorization: Bearer $token" \
               "$url")
             
             if [ "$STATUS_CODE" -eq 200 ]; then
               echo "✅ Success (Status: 200)"
             else
               echo "❌ Failed (Status: $STATUS_CODE)"
-              # Optional: Don't error out entire workflow for just one fail, 
+              # Optional: Don't error out entire workflow for just one fail,
               # just mark variable
               error_found=1
             fi
@@ -59,23 +92,56 @@ jobs:
       # --------------------------------------------------------------------------
       - name: Run POST Generators
         env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
           POST_CONFIG: |
-            https://hasibxx2x-gemini.hf.space/generate
+            https://bdfbefbh-gemini.hf.space/generate|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
             {
               "user_prompt": "hi",
               "system_prompt": "helpful assistant",
               "config": "auto"
             }
-
-            https://hasibxx2x-gemini1.hf.space/generate
+            https://bdfbefbh-gemini1.hf.space/generate|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
             {
               "user_prompt": "hi",
               "system_prompt": "helpful assistant",
               "config": "auto"
             }
-
-            https://hasibxx2x-gemini2.hf.space/generate
+            https://bdfbefbh-gemini2.hf.space/generate|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
+            {
+              "user_prompt": "hi",
+              "system_prompt": "helpful assistant",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini3.hf.space/generate|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
+            {
+              "user_prompt": "hi",
+              "system_prompt": "helpful assistant",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini4.hf.space/generate|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
+            {
+              "user_prompt": "hi",
+              "system_prompt": "helpful assistant",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini5.hf.space/generate|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
+            {
+              "user_prompt": "hi",
+              "system_prompt": "helpful assistant",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini6.hf.space/generate|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
+            {
+              "user_prompt": "hi",
+              "system_prompt": "helpful assistant",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini7.hf.space/generate|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
+            {
+              "user_prompt": "hi",
+              "system_prompt": "helpful assistant",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini8.hf.space/generate|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
             {
               "user_prompt": "hi",
               "system_prompt": "helpful assistant",
@@ -84,13 +150,9 @@ jobs:
             
         run: |
           echo "Starting POST requests..."
-
-          if [ -z "$HF_TOKEN" ]; then
-            echo "❌ Error: HF_TOKEN secret is missing or empty!"
-            exit 1
-          fi
           
           CURRENT_URL=""
+          CURRENT_TOKEN=""
           JSON_BUFFER=""
           ERROR_FOUND=0
           
@@ -105,10 +167,9 @@ jobs:
               echo "" > response.txt
               
               # Execute Curl with Auth
-              # Added: -H "Authorization: Bearer $HF_TOKEN"
               STATUS_CODE=$(curl -s -o response.txt -w "%{http_code}" \
                 -H "Content-Type: application/json" \
-                -H "Authorization: Bearer $HF_TOKEN" \
+                -H "Authorization: Bearer $CURRENT_TOKEN" \
                 -X POST \
                 -d @post_body.json \
                 --max-time 480 \
@@ -138,7 +199,11 @@ jobs:
 
             if [[ "$clean_line" == http* ]]; then
               execute_post
-              CURRENT_URL="$clean_line"
+              
+              # Split line into URL and TOKEN
+              CURRENT_URL="${clean_line%|*}"
+              CURRENT_TOKEN="${clean_line#*|}"
+              
               JSON_BUFFER=""
             else
               JSON_BUFFER+="$line "
