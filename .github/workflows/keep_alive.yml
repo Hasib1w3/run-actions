@@ -18,7 +18,11 @@ jobs:
           HF_TOKEN: ${{ secrets.HF_TOKEN }} 
           URLS: >
             https://hasibxx2x-siteclone.hf.space/health
+            https://hasibxx2x-siteclone1.hf.space/health
+            https://hasibxx2x-siteclone2.hf.space/health
             https://hasibxx2x-inspiration.hf.space/health
+            https://hasibxx2x-inspiration1.hf.space/health
+            https://hasibxx2x-inspiration2.hf.space/health
             https://hasibxx2x-api.hf.space/health
             https://hasibxx2x-api1.hf.space/health
             https://hasibxx2x-api2.hf.space/health
@@ -57,11 +61,25 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
           POST_CONFIG: |
+            https://hasibxx2x-gemini.hf.space/generate
+            {
+              "user_prompt": "hi",
+              "system_prompt": "helpful assistant",
+              "config": "auto"
+            }
+
+            https://hasibxx2x-gemini1.hf.space/generate
+            {
+              "user_prompt": "hi",
+              "system_prompt": "helpful assistant",
+              "config": "auto"
+            }
+
             https://hasibxx2x-gemini2.hf.space/generate
             {
               "user_prompt": "hi",
               "system_prompt": "helpful assistant",
-              "config": "api"
+              "config": "auto"
             }
             
         run: |
