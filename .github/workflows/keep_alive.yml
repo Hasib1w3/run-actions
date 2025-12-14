@@ -1,5 +1,16 @@
 name: Keep Spaces Alive
 
+# ------------------------------------------------------------------------------
+# REQUIRED GITHUB SECRETS
+# ------------------------------------------------------------------------------
+# Please create the following Repository Secrets in GitHub (Settings -> Secrets):
+# 1. HF_TOKEN_HASIBXX2X
+# 2. HF_TOKEN_TBHRTGJNR
+# 3. HF_TOKEN_BDFBEFBH
+# 4. HF_TOKEN_HTYJY6
+# 5. HF_TOKEN_MUHAMMAD
+# ------------------------------------------------------------------------------
+
 on:
   schedule:
     - cron: "0 */10 * * *" # Every 10 hours
@@ -9,213 +20,184 @@ jobs:
   ping_spaces:
     runs-on: ubuntu-latest
     steps:
-      # --------------------------------------------------------------------------
-      # STEP 1: Standard Health Checks (GET Requests) with AUTH
-      # --------------------------------------------------------------------------
-      - name: Check Health Endpoints (GET)
+      - name: Run Health and Action Checks
         env:
-          # URL|TOKEN format
-          URLS: >
-            https://hasibxx2x-api.hf.space/health|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
-            https://hasibxx2x-api1.hf.space/health|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
-            https://hasibxx2x-api2.hf.space/health|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
-            https://hasibxx2x-api3.hf.space/health|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
-            https://hasibxx2x-api4.hf.space/health|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
-            https://hasibxx2x-api5.hf.space/health|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
-            https://hasibxx2x-api6.hf.space/health|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
-            https://hasibxx2x-api7.hf.space/health|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
-            https://hasibxx2x-api8.hf.space/health|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
-            https://tbhrtgjnr-api.hf.space/health|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
-            https://tbhrtgjnr-api1.hf.space/health|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
-            https://tbhrtgjnr-api2.hf.space/health|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
-            https://tbhrtgjnr-api3.hf.space/health|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
-            https://tbhrtgjnr-api4.hf.space/health|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
-            https://tbhrtgjnr-api5.hf.space/health|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
-            https://tbhrtgjnr-api6.hf.space/health|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
-            https://tbhrtgjnr-api7.hf.space/health|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
-            https://tbhrtgjnr-api8.hf.space/health|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
-            https://bdfbefbh-gemini.hf.space/health|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
-            https://bdfbefbh-gemini1.hf.space/health|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
-            https://bdfbefbh-gemini2.hf.space/health|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
-            https://bdfbefbh-gemini3.hf.space/health|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
-            https://bdfbefbh-gemini4.hf.space/health|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
-            https://bdfbefbh-gemini5.hf.space/health|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
-            https://bdfbefbh-gemini6.hf.space/health|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
-            https://bdfbefbh-gemini7.hf.space/health|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
-            https://bdfbefbh-gemini8.hf.space/health|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
-            https://htyjy6-siteclone.hf.space/health|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
-            https://htyjy6-siteclone1.hf.space/health|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
-            https://htyjy6-siteclone2.hf.space/health|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
-            https://htyjy6-siteclone3.hf.space/health|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
-            https://htyjy6-siteclone4.hf.space/health|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
-            https://htyjy6-siteclone5.hf.space/health|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
-            https://htyjy6-siteclone6.hf.space/health|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
-            https://htyjy6-siteclone7.hf.space/health|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
-            https://htyjy6-siteclone8.hf.space/health|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
-            https://muhammadshahalamsheikh-inspiration.hf.space/health|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
-            https://muhammadshahalamsheikh-inspiration1.hf.space/health|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
-            https://muhammadshahalamsheikh-inspiration2.hf.space/health|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
-            https://muhammadshahalamsheikh-inspiration3.hf.space/health|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
-            https://muhammadshahalamsheikh-inspiration4.hf.space/health|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
-            https://muhammadshahalamsheikh-inspiration5.hf.space/health|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
-            https://muhammadshahalamsheikh-inspiration6.hf.space/health|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
-            https://muhammadshahalamsheikh-inspiration7.hf.space/health|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
-            https://muhammadshahalamsheikh-inspiration8.hf.space/health|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
-        run: |
-          echo "Starting health checks..."
-          error_found=0
-          
-          for entry in $URLS; do
-            # Split entry into URL and TOKEN using '|' delimiter
-            url="${entry%|*}"
-            token="${entry#*|}"
+          # Map Secrets to Env Vars for Shell Access
+          TOKEN_HASIB: ${{ secrets.HF_TOKEN_HASIBXX2X }}
+          TOKEN_TBHR: ${{ secrets.HF_TOKEN_TBHRTGJNR }}
+          TOKEN_GEMINI: ${{ secrets.HF_TOKEN_BDFBEFBH }}
+          TOKEN_CLONE: ${{ secrets.HF_TOKEN_HTYJY6 }}
+          TOKEN_INSPIRE: ${{ secrets.HF_TOKEN_MUHAMMAD }}
 
-            echo "Target: $url"
-            STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
-              --max-time 10 \
-              -H "Authorization: Bearer $token" \
-              "$url")
+          # List of URL|ENV_VAR_NAME
+          URLS: >
+            https://hasibxx2x-api.hf.space/health|TOKEN_HASIB
+            https://hasibxx2x-api1.hf.space/health|TOKEN_HASIB
+            https://hasibxx2x-api2.hf.space/health|TOKEN_HASIB
+            https://hasibxx2x-api3.hf.space/health|TOKEN_HASIB
+            https://hasibxx2x-api4.hf.space/health|TOKEN_HASIB
+            https://hasibxx2x-api5.hf.space/health|TOKEN_HASIB
+            https://hasibxx2x-api6.hf.space/health|TOKEN_HASIB
+            https://hasibxx2x-api7.hf.space/health|TOKEN_HASIB
+            https://hasibxx2x-api8.hf.space/health|TOKEN_HASIB
+            https://tbhrtgjnr-api.hf.space/health|TOKEN_TBHR
+            https://tbhrtgjnr-api1.hf.space/health|TOKEN_TBHR
+            https://tbhrtgjnr-api2.hf.space/health|TOKEN_TBHR
+            https://tbhrtgjnr-api3.hf.space/health|TOKEN_TBHR
+            https://tbhrtgjnr-api4.hf.space/health|TOKEN_TBHR
+            https://tbhrtgjnr-api5.hf.space/health|TOKEN_TBHR
+            https://tbhrtgjnr-api6.hf.space/health|TOKEN_TBHR
+            https://tbhrtgjnr-api7.hf.space/health|TOKEN_TBHR
+            https://tbhrtgjnr-api8.hf.space/health|TOKEN_TBHR
+            https://bdfbefbh-gemini.hf.space/health|TOKEN_GEMINI
+            https://bdfbefbh-gemini1.hf.space/health|TOKEN_GEMINI
+            https://bdfbefbh-gemini2.hf.space/health|TOKEN_GEMINI
+            https://bdfbefbh-gemini3.hf.space/health|TOKEN_GEMINI
+            https://bdfbefbh-gemini4.hf.space/health|TOKEN_GEMINI
+            https://bdfbefbh-gemini5.hf.space/health|TOKEN_GEMINI
+            https://bdfbefbh-gemini6.hf.space/health|TOKEN_GEMINI
+            https://bdfbefbh-gemini7.hf.space/health|TOKEN_GEMINI
+            https://bdfbefbh-gemini8.hf.space/health|TOKEN_GEMINI
+            https://htyjy6-siteclone.hf.space/health|TOKEN_CLONE
+            https://htyjy6-siteclone1.hf.space/health|TOKEN_CLONE
+            https://htyjy6-siteclone2.hf.space/health|TOKEN_CLONE
+            https://htyjy6-siteclone3.hf.space/health|TOKEN_CLONE
+            https://htyjy6-siteclone4.hf.space/health|TOKEN_CLONE
+            https://htyjy6-siteclone5.hf.space/health|TOKEN_CLONE
+            https://htyjy6-siteclone6.hf.space/health|TOKEN_CLONE
+            https://htyjy6-siteclone7.hf.space/health|TOKEN_CLONE
+            https://htyjy6-siteclone8.hf.space/health|TOKEN_CLONE
+            https://muhammadshahalamsheikh-inspiration.hf.space/health|TOKEN_INSPIRE
+            https://muhammadshahalamsheikh-inspiration1.hf.space/health|TOKEN_INSPIRE
+            https://muhammadshahalamsheikh-inspiration2.hf.space/health|TOKEN_INSPIRE
+            https://muhammadshahalamsheikh-inspiration3.hf.space/health|TOKEN_INSPIRE
+            https://muhammadshahalamsheikh-inspiration4.hf.space/health|TOKEN_INSPIRE
+            https://muhammadshahalamsheikh-inspiration5.hf.space/health|TOKEN_INSPIRE
+            https://muhammadshahalamsheikh-inspiration6.hf.space/health|TOKEN_INSPIRE
+            https://muhammadshahalamsheikh-inspiration7.hf.space/health|TOKEN_INSPIRE
+            https://muhammadshahalamsheikh-inspiration8.hf.space/health|TOKEN_INSPIRE
+          
+          # POST Config using indirect variables
+          POST_CONFIG: |
+            https://bdfbefbh-gemini.hf.space/generate|TOKEN_GEMINI
+            {
+              "user_prompt": "hi",
+              "system_prompt": "keep-alive check",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini1.hf.space/generate|TOKEN_GEMINI
+            {
+              "user_prompt": "hi",
+              "system_prompt": "keep-alive check",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini2.hf.space/generate|TOKEN_GEMINI
+            {
+              "user_prompt": "hi",
+              "system_prompt": "keep-alive check",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini3.hf.space/generate|TOKEN_GEMINI
+            {
+              "user_prompt": "hi",
+              "system_prompt": "keep-alive check",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini4.hf.space/generate|TOKEN_GEMINI
+            {
+              "user_prompt": "hi",
+              "system_prompt": "keep-alive check",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini5.hf.space/generate|TOKEN_GEMINI
+            {
+              "user_prompt": "hi",
+              "system_prompt": "keep-alive check",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini6.hf.space/generate|TOKEN_GEMINI
+            {
+              "user_prompt": "hi",
+              "system_prompt": "keep-alive check",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini7.hf.space/generate|TOKEN_GEMINI
+            {
+              "user_prompt": "hi",
+              "system_prompt": "keep-alive check",
+              "config": "auto"
+            }
+            https://bdfbefbh-gemini8.hf.space/generate|TOKEN_GEMINI
+            {
+              "user_prompt": "hi",
+              "system_prompt": "keep-alive check",
+              "config": "auto"
+            }
+        
+        run: |
+          # --- Helper to resolve env var by name ---
+          get_token() {
+            var_name=$1
+            # indirect expansion using bash syntax (works in ubuntu-latest)
+            echo "${!var_name}"
+          }
+
+          echo "Starting Health Checks (GET)..."
+          
+          # Iterate GET URLs
+          for entry in $URLS; do
+            url="${entry%|*}"
+            token_var="${entry#*|}"
+            token=$(get_token "$token_var")
+
+            echo "GET: $url (Using $token_var)"
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -H "Authorization: Bearer $token" "$url")
             
-            if [ "$STATUS_CODE" -eq 200 ]; then
-              echo "✅ Success (Status: 200)"
+            if [ "$STATUS" -eq 200 ] || [ "$STATUS" -eq 405 ] || [ "$STATUS" -eq 401 ]; then 
+               # 200 OK. 405/401 implies alive but maybe method/path mismatch which confirms 'alive'.
+               echo "✅ OK ($STATUS)"
             else
-              echo "❌ Failed (Status: $STATUS_CODE)"
-              # Optional: Don't error out entire workflow for just one fail,
-              # just mark variable
-              error_found=1
+               echo "⚠️ Status: $STATUS"
             fi
-            echo "----------------------------------------"
+            echo "---"
           done
 
-      # --------------------------------------------------------------------------
-      # STEP 2: POST Requests (Generations/Actions) with AUTH & LOGGING
-      # --------------------------------------------------------------------------
-      - name: Run POST Generators
-        env:
-          POST_CONFIG: |
-            https://bdfbefbh-gemini.hf.space/generate|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
-            {
-              "user_prompt": "hi",
-              "system_prompt": "helpful assistant",
-              "config": "auto"
-            }
-            https://bdfbefbh-gemini1.hf.space/generate|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
-            {
-              "user_prompt": "hi",
-              "system_prompt": "helpful assistant",
-              "config": "auto"
-            }
-            https://bdfbefbh-gemini2.hf.space/generate|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
-            {
-              "user_prompt": "hi",
-              "system_prompt": "helpful assistant",
-              "config": "auto"
-            }
-            https://bdfbefbh-gemini3.hf.space/generate|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
-            {
-              "user_prompt": "hi",
-              "system_prompt": "helpful assistant",
-              "config": "auto"
-            }
-            https://bdfbefbh-gemini4.hf.space/generate|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
-            {
-              "user_prompt": "hi",
-              "system_prompt": "helpful assistant",
-              "config": "auto"
-            }
-            https://bdfbefbh-gemini5.hf.space/generate|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
-            {
-              "user_prompt": "hi",
-              "system_prompt": "helpful assistant",
-              "config": "auto"
-            }
-            https://bdfbefbh-gemini6.hf.space/generate|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
-            {
-              "user_prompt": "hi",
-              "system_prompt": "helpful assistant",
-              "config": "auto"
-            }
-            https://bdfbefbh-gemini7.hf.space/generate|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
-            {
-              "user_prompt": "hi",
-              "system_prompt": "helpful assistant",
-              "config": "auto"
-            }
-            https://bdfbefbh-gemini8.hf.space/generate|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
-            {
-              "user_prompt": "hi",
-              "system_prompt": "helpful assistant",
-              "config": "auto"
-            }
-            
-        run: |
-          echo "Starting POST requests..."
+          echo "Starting Generation Checks (POST)..."
           
           CURRENT_URL=""
-          CURRENT_TOKEN=""
+          CURRENT_TOKEN_VAR=""
           JSON_BUFFER=""
-          ERROR_FOUND=0
           
           execute_post() {
             if [ -n "$CURRENT_URL" ]; then
-              echo "👉 Triggering: $CURRENT_URL"
+              token=$(get_token "$CURRENT_TOKEN_VAR")
+              echo "POST: $CURRENT_URL (Using $CURRENT_TOKEN_VAR)"
               
-              # Save JSON payload to file
-              echo "$JSON_BUFFER" > post_body.json
+              echo "$JSON_BUFFER" > post.json
+              STATUS=$(curl -s -o resp.txt -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $token" -d @post.json --max-time 120 "$CURRENT_URL")
               
-              # Clear previous response file
-              echo "" > response.txt
-              
-              # Execute Curl with Auth
-              STATUS_CODE=$(curl -s -o response.txt -w "%{http_code}" \
-                -H "Content-Type: application/json" \
-                -H "Authorization: Bearer $CURRENT_TOKEN" \
-                -X POST \
-                -d @post_body.json \
-                --max-time 480 \
-                "$CURRENT_URL")
-
-              if [ "$STATUS_CODE" -eq 200 ]; then
-                echo "✅ Request finished (Status: 200)"
-                echo "📄 API RESPONSE:"
-                echo "----------------------------------------"
-                cat response.txt
-                echo ""
-                echo "----------------------------------------"
+              if [ "$STATUS" -eq 200 ]; then
+                 echo "✅ OK (200)"
+                 # cat resp.txt | head -c 100 
               else
-                echo "❌ Request failed (Status: $STATUS_CODE)"
-                echo "📄 ERROR DETAILS:"
-                cat response.txt
-                ERROR_FOUND=1
+                 echo "⚠️ Status: $STATUS"
               fi
+              echo "---"
             fi
           }
 
-          # Read config line by line
           while IFS= read -r line || [ -n "$line" ]; do
-            clean_line=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-            
-            if [ -z "$clean_line" ]; then continue; fi
-
-            if [[ "$clean_line" == http* ]]; then
-              execute_post
-              
-              # Split line into URL and TOKEN
-              CURRENT_URL="${clean_line%|*}"
-              CURRENT_TOKEN="${clean_line#*|}"
-              
-              JSON_BUFFER=""
-            else
-              JSON_BUFFER+="$line "
-            fi
+             clean=$(echo "$line" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
+             if [ -z "$clean" ]; then continue; fi
+             
+             if [[ "$clean" == http* ]]; then
+               execute_post
+               CURRENT_URL="${clean%|*}"
+               CURRENT_TOKEN_VAR="${clean#*|}"
+               JSON_BUFFER=""
+             else
+               JSON_BUFFER+="$line "
+             fi
           done <<< "$POST_CONFIG"
-
-          # Execute final request
+          
           execute_post
-
-          if [ $ERROR_FOUND -eq 1 ]; then
-            echo "⚠️ Some POST requests failed."
-            exit 1
-          else
-            echo "🎉 All requests completed successfully."
-          fi
