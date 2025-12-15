@@ -174,14 +174,20 @@ jobs:
               echo "POST: $CURRENT_URL (Using $CURRENT_TOKEN_VAR)"
               
               echo "$JSON_BUFFER" > post.json
-              STATUS=$(curl -s -o resp.txt -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $token" -d @post.json --max-time 120 "$CURRENT_URL")
+              
+              # Wait Max 240 seconds (4 minutes)
+              STATUS=$(curl -s -o resp.txt -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $token" -d @post.json --max-time 240 "$CURRENT_URL")
               
               if [ "$STATUS" -eq 200 ]; then
                  echo "✅ OK (200)"
-                 # cat resp.txt | head -c 100 
               else
                  echo "⚠️ Status: $STATUS"
               fi
+              
+              # GATHERING RESPONSE: Print the response from resp.txt
+              echo "⬇️ Response:"
+              cat resp.txt
+              echo "" # Force a new line
               echo "---"
             fi
           }
