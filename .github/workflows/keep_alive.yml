@@ -83,7 +83,7 @@ jobs:
             {
               "user_prompt": "hi",
               "system_prompt": "keep-alive check",
-              "config": "auto"
+              "config": "api"
             }
             https://bdfbefbh-gemini1.hf.space/generate|TOKEN_GEMINI
             {
