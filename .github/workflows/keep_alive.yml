@@ -29,9 +29,8 @@ jobs:
           TOKEN_CLONE: ${{ secrets.HF_TOKEN_HTYJY6 }}
           TOKEN_INSPIRE: ${{ secrets.HF_TOKEN_MUHAMMAD }}
 
-          # List of URL|ENV_VAR_NAME
+          # List of URL|ENV_VAR_NAME (Use NONE for public endpoints)
           URLS: >
-            https://hjtr-code-exe.hf.space/health
             https://hasibxx2x-api.hf.space/health|TOKEN_HASIB
             https://hasibxx2x-api1.hf.space/health|TOKEN_HASIB
             https://hasibxx2x-api2.hf.space/health|TOKEN_HASIB
@@ -77,6 +76,7 @@ jobs:
             https://muhammadshahalamsheikh-inspiration6.hf.space/health|TOKEN_INSPIRE
             https://muhammadshahalamsheikh-inspiration7.hf.space/health|TOKEN_INSPIRE
             https://muhammadshahalamsheikh-inspiration8.hf.space/health|TOKEN_INSPIRE
+            https://hjtr-code-exe.hf.space/health|NONE
           
           # POST Config using indirect variables
           POST_CONFIG: |
@@ -149,10 +149,16 @@ jobs:
           for entry in $URLS; do
             url="${entry%|*}"
             token_var="${entry#*|}"
-            token=$(get_token "$token_var")
 
-            echo "GET: $url (Using $token_var)"
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -H "Authorization: Bearer $token" "$url")
+            # Handle public endpoints (no token needed)
+            if [ "$token_var" == "NONE" ]; then
+              echo "GET: $url (Public - No Auth)"
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$url")
+            else
+              token=$(get_token "$token_var")
+              echo "GET: $url (Using $token_var)"
+              STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 -H "Authorization: Bearer $token" "$url")
+            fi
             
             if [ "$STATUS" -eq 200 ] || [ "$STATUS" -eq 405 ] || [ "$STATUS" -eq 401 ]; then 
                # 200 OK. 405/401 implies alive but maybe method/path mismatch which confirms 'alive'.
@@ -171,13 +177,17 @@ jobs:
           
           execute_post() {
             if [ -n "$CURRENT_URL" ]; then
-              token=$(get_token "$CURRENT_TOKEN_VAR")
               echo "POST: $CURRENT_URL (Using $CURRENT_TOKEN_VAR)"
               
               echo "$JSON_BUFFER" > post.json
               
-              # Wait Max 240 seconds (4 minutes)
-              STATUS=$(curl -s -o resp.txt -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $token" -d @post.json --max-time 240 "$CURRENT_URL")
+              # Handle public endpoints (no token needed)
+              if [ "$CURRENT_TOKEN_VAR" == "NONE" ]; then
+                STATUS=$(curl -s -o resp.txt -w "%{http_code}" -X POST -H "Content-Type: application/json" -d @post.json --max-time 240 "$CURRENT_URL")
+              else
+                token=$(get_token "$CURRENT_TOKEN_VAR")
+                STATUS=$(curl -s -o resp.txt -w "%{http_code}" -X POST -H "Content-Type: application/json" -H "Authorization: Bearer $token" -d @post.json --max-time 240 "$CURRENT_URL")
+              fi
               
               if [ "$STATUS" -eq 200 ]; then
                  echo "✅ OK (200)"
