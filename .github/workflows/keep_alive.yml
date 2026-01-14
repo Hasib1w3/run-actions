@@ -31,6 +31,7 @@ jobs:
 
           # List of URL|ENV_VAR_NAME
           URLS: >
+            https://hjtr-code-exe.hf.space/health
             https://hasibxx2x-api.hf.space/health|TOKEN_HASIB
             https://hasibxx2x-api1.hf.space/health|TOKEN_HASIB
             https://hasibxx2x-api2.hf.space/health|TOKEN_HASIB
