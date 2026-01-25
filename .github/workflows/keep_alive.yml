@@ -296,18 +296,24 @@ jobs:
           export -f process_post
 
           MAX_POST_PARALLEL=15
+          pids=()
 
           if [ -n "$POST_URLS" ]; then
               for entry in $POST_URLS; do
                 process_post "$entry" &
+                pids+=($!)
                 
-                # Dynamic waiter using `jobs` command (Self Healing)
+                # If we hit max concurrent, wait for at least one to clear
                 while [ "$(jobs -r | wc -l)" -ge "$MAX_POST_PARALLEL" ]; do
-                  wait -n
+                   wait -n
                 done
               done
-              # IMPORTANT: Wait for ALL remaining background jobs
-              wait
+              
+              # FINAL: Wait for EVERY specific PID we launched to finish
+              # Escape curly braces for Python f-string logic in script generation
+              for pid in "${pids[@]}"; do
+                wait $pid
+              done
           fi
           
           echo -e "\n✨ All health checks finished."
