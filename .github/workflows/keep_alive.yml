@@ -219,7 +219,6 @@ jobs:
               token=$(get_token "$token_var")
               if [ -z "$token" ]; then
                  echo "⚠️ Token variable '$token_var' is empty. URL: $url"
-                 # Continue trying without token? Or fail? Fail implies logic error.
               fi
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 -H "Authorization: Bearer $token" "$url")
             fi
@@ -236,23 +235,16 @@ jobs:
           
           MAX_PARALLEL=20
           
-          # Create URL list temp file to allow xargs -P 
-          # xargs is generally better for process pooling than a raw bash loop wait
-          
-          echo "$URLS" > urls.txt
-          
-          # We need to loop manually though for 'process_get' as an exported bash func with args can be tricky in all envs
-          # Sticking to the semaphore loop for cross-platform robustness if needed, but let's just make sure it processes ALL.
-          
-          current_jobs=0
           for entry in $URLS; do
             process_get "$entry" &
-            current_jobs=$((current_jobs + 1))
-            if [ "$current_jobs" -ge "$MAX_PARALLEL" ]; then
+            
+            # Simple robust parallel loop
+            # wait -n works in bash 4.3+ (standard in GH Actions)
+            if [ "$(jobs -r | wc -l)" -ge "$MAX_PARALLEL" ]; then
                 wait -n
-                current_jobs=$((current_jobs - 1))
             fi
           done
+          # MUST WAIT FOR REMAINDER
           wait
 
           # ------------------------------------------------------------
@@ -269,36 +261,39 @@ jobs:
 
             token=$(get_token "$token_var")
             
-            # Capture response
+            # Capture both code and body
+            # curl write-out to get status at end
             RESP=$(curl -s -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
                  -H "Authorization: Bearer $token" \
                  -d "$payload" --max-time 45 "$url")
             
+            # Last line is status
             STATUS=$(echo "$RESP" | tail -n 1)
+            # All lines except last are body
             BODY=$(echo "$RESP" | head -n -1)
 
             if [ "$STATUS" -eq 200 ]; then
                echo "✅ POST OK (200): $url"
             else
                echo "❌ POST FAIL ($STATUS): $url"
-               # echo "   Body: ${BODY:0:150}..."
+               # echo "   Reason: ${BODY:0:150}..."
             fi
           }
           
           export -f process_post
 
           MAX_POST_PARALLEL=15
-          current_post_jobs=0
 
           if [ -n "$POST_URLS" ]; then
               for entry in $POST_URLS; do
                 process_post "$entry" &
-                current_post_jobs=$((current_post_jobs + 1))
-                if [ "$current_post_jobs" -ge "$MAX_POST_PARALLEL" ]; then
+                
+                # Dynamic waiter using `jobs` command
+                if [ "$(jobs -r | wc -l)" -ge "$MAX_POST_PARALLEL" ]; then
                   wait -n
-                  current_post_jobs=$((current_post_jobs - 1))
                 fi
               done
+              # IMPORTANT: Wait for ALL remaining background jobs
               wait
           fi
           
