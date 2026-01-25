@@ -127,7 +127,7 @@ jobs:
           }
           
           # ============================================================
-          # POST FUNCTION - FIXED
+          # POST FUNCTION - 2 MINUTE TIMEOUT
           # ============================================================
           do_post() {
             local entry="$1"
@@ -141,35 +141,33 @@ jobs:
             local tmp_resp=$(mktemp)
             local start=$(date +%s)
             
-            # Run curl - capture http code directly, NO || echo fallback
+            # 2 MINUTE TIMEOUT
             local http_code
             http_code=$(curl -s -w "%{http_code}" -o "$tmp_resp" \
               -X POST \
               -H "Content-Type: application/json" \
               -H "Authorization: Bearer $token" \
               -d "$payload" \
-              --max-time 60 \
-              --connect-timeout 15 \
+              --max-time 120 \
+              --connect-timeout 20 \
               "$url" 2>/dev/null)
             
             local curl_exit=$?
             local duration=$(($(date +%s) - start))
-            local body=$(head -c 300 "$tmp_resp" 2>/dev/null)
+            local body=$(head -c 200 "$tmp_resp" 2>/dev/null | tr -d '\n')
             rm -f "$tmp_resp"
             
-            # Check curl exit code FIRST
+            # Single line output - no separate response line
             if [[ $curl_exit -eq 28 ]]; then
-              echo "⏱️ POST TIMEOUT [${duration}s]: $url" >> "$results_file"
+              echo "⏱️ TIMEOUT [${duration}s]: $url" >> "$results_file"
             elif [[ $curl_exit -eq 7 ]]; then
-              echo "🔌 POST CONNECTION REFUSED [${duration}s]: $url" >> "$results_file"
+              echo "🔌 CONN_REFUSED [${duration}s]: $url" >> "$results_file"
             elif [[ $curl_exit -ne 0 ]]; then
-              echo "❌ POST CURL ERROR ($curl_exit) [${duration}s]: $url" >> "$results_file"
+              echo "❌ CURL_ERR_$curl_exit [${duration}s]: $url" >> "$results_file"
             elif [[ "$http_code" == "200" ]]; then
-              echo "✅ POST OK [${duration}s]: $url" >> "$results_file"
-              echo "   📄 ${body:0:100}" >> "$results_file"
+              echo "✅ OK [${duration}s]: $url | ${body:0:80}" >> "$results_file"
             else
-              echo "❌ POST FAIL ($http_code) [${duration}s]: $url" >> "$results_file"
-              echo "   📄 ${body:0:150}" >> "$results_file"
+              echo "❌ HTTP_$http_code [${duration}s]: $url | ${body:0:80}" >> "$results_file"
             fi
           }
           
@@ -297,23 +295,21 @@ jobs:
           for entry in "${GET_URLS[@]}"; do
             do_get "$entry" "$GET_RESULTS" &
             pids+=($!)
-            
             if [[ ${#pids[@]} -ge $MAX_PARALLEL ]]; then
               wait "${pids[0]}" 2>/dev/null
               pids=("${pids[@]:1}")
             fi
           done
-          
           for pid in "${pids[@]}"; do wait "$pid" 2>/dev/null; done
           
           GET_DURATION=$(($(date +%s) - GET_START))
-          cat "$GET_RESULTS" | sort
+          sort "$GET_RESULTS"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "⏱️ GET Phase: ${GET_DURATION}s total"
+          echo "⏱️ GET Phase: ${GET_DURATION}s"
           
           # ============================================================
           echo ""
-          echo "🚀 Starting POST Checks (${#POST_URLS[@]} URLs)..."
+          echo "🚀 Starting POST Checks (${#POST_URLS[@]} URLs) - 2min timeout..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           POST_START=$(date +%s)
           
@@ -321,36 +317,41 @@ jobs:
           for entry in "${POST_URLS[@]}"; do
             do_post "$entry" "$POST_RESULTS" &
             pids+=($!)
-            
             if [[ ${#pids[@]} -ge $MAX_PARALLEL ]]; then
               wait "${pids[0]}" 2>/dev/null
               pids=("${pids[@]:1}")
             fi
           done
-          
           for pid in "${pids[@]}"; do wait "$pid" 2>/dev/null; done
           
           POST_DURATION=$(($(date +%s) - POST_START))
-          cat "$POST_RESULTS" | sort
+          sort "$POST_RESULTS"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "⏱️ POST Phase: ${POST_DURATION}s total"
+          echo "⏱️ POST Phase: ${POST_DURATION}s"
           
           # ============================================================
-          # SUMMARY
+          # SUMMARY - FIXED
           # ============================================================
           echo ""
           echo "📊 SUMMARY"
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           
-          GET_OK=$(grep -c "✅ GET" "$GET_RESULTS" 2>/dev/null || echo 0)
-          GET_FAIL=$(grep -c "❌ GET" "$GET_RESULTS" 2>/dev/null || echo 0)
-          GET_TIMEOUT=$(grep -c "⏱️ GET" "$GET_RESULTS" 2>/dev/null || echo 0)
-          POST_OK=$(grep -c "✅ POST" "$POST_RESULTS" 2>/dev/null || echo 0)
-          POST_FAIL=$(grep -c "❌ POST" "$POST_RESULTS" 2>/dev/null || echo 0)
-          POST_TIMEOUT=$(grep -c "⏱️ POST" "$POST_RESULTS" 2>/dev/null || echo 0)
+          GET_OK=$(grep -c "✅ GET" "$GET_RESULTS" || true)
+          GET_FAIL=$(grep -c "❌ GET" "$GET_RESULTS" || true)
+          GET_TIMEOUT=$(grep -c "⏱️ GET" "$GET_RESULTS" || true)
+          POST_OK=$(grep -c "✅ OK" "$POST_RESULTS" || true)
+          POST_FAIL=$(grep -c "❌" "$POST_RESULTS" || true)
+          POST_TIMEOUT=$(grep -c "⏱️ TIMEOUT" "$POST_RESULTS" || true)
           
-          echo "GET:  ✅ $GET_OK ok | ❌ $GET_FAIL fail | ⏱️ $GET_TIMEOUT timeout"
-          echo "POST: ✅ $POST_OK ok | ❌ $POST_FAIL fail | ⏱️ $POST_TIMEOUT timeout"
+          : ${GET_OK:=0}
+          : ${GET_FAIL:=0}
+          : ${GET_TIMEOUT:=0}
+          : ${POST_OK:=0}
+          : ${POST_FAIL:=0}
+          : ${POST_TIMEOUT:=0}
+          
+          echo "GET:  ✅ $GET_OK ok  |  ❌ $GET_FAIL fail  |  ⏱️ $GET_TIMEOUT timeout"
+          echo "POST: ✅ $POST_OK ok  |  ❌ $POST_FAIL fail  |  ⏱️ $POST_TIMEOUT timeout"
           echo ""
           echo "✨ All checks completed!"
           
