@@ -266,6 +266,7 @@ jobs:
               while read -r entry; do
                 if [ -z "$entry" ]; then continue; fi
                 
+                # IMPORTANT: function call in subshell via background job needs correct scope
                 process_post "$entry" &
                 
                 current_post_jobs=$((current_post_jobs + 1))
