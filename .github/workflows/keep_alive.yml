@@ -262,11 +262,17 @@ jobs:
           current_post_jobs=0
 
           if [ -n "$POST_URLS" ]; then
-              # Re-parse robustly.
-              while read -r entry; do
+              # Save strict separator
+              OLD_IFS=$IFS
+              IFS=$'
+'
+              
+              # Loop line-by-line treating whole line as one entry
+              for entry in $POST_URLS; do
+                # Trim entry just in case
+                entry=$(echo "$entry" | xargs)
                 if [ -z "$entry" ]; then continue; fi
                 
-                # IMPORTANT: function call in subshell via background job needs correct scope
                 process_post "$entry" &
                 
                 current_post_jobs=$((current_post_jobs + 1))
@@ -274,7 +280,9 @@ jobs:
                   wait -n
                   current_post_jobs=$((current_post_jobs - 1))
                 fi
-              done <<< "$POST_URLS"
+              done
+              
+              IFS=$OLD_IFS
               wait
           fi
           
