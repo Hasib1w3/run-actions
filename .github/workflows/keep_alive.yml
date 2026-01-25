@@ -265,7 +265,7 @@ jobs:
               # Save strict separator
               OLD_IFS=$IFS
               IFS=$'
-
+'
               
               # Loop line-by-line treating whole line as one entry
               for entry in $POST_URLS; do
