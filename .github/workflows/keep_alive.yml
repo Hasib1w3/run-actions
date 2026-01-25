@@ -255,42 +255,17 @@ jobs:
           
           echo -e "\n🚀 Starting Parallel POST Checks (Max 15 concurrently)..."
           
-          process_post() {
-            entry=$1
-            if [ -z "$entry" ]; then return; fi
-            
-            url=$(echo "$entry" | cut -d'|' -f1)
-            token_var=$(echo "$entry" | cut -d'|' -f2)
-            payload=$(echo "$entry" | cut -d'|' -f3)
-
-            token=$(get_token "$token_var")
-            
-            # Capture both code and body
-            # curl write-out to get status at end
-            RESP=$(curl -s -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
-                 -H "Authorization: Bearer $token" \
-                 -d "$payload" --max-time 45 "$url")
-            
-            # Last line is status
-            STATUS=$(echo "$RESP" | tail -n 1)
-            # All lines except last are body
-            BODY=$(echo "$RESP" | head -n -1)
-
-            if [ "$STATUS" -eq 200 ]; then
-               echo "✅ POST OK (200): $url"
-            else
-               echo "❌ POST FAIL ($STATUS): $url"
-               echo "   Reason: ${BODY:0:150}..."
-            fi
-          }
+          # Fix: Standard loop iteration over whitespace separated URL blocks using read -r line 
+          # prevents subshell scope issues and missing lines
           
-          export -f process_post
-
           MAX_POST_PARALLEL=15
           current_post_jobs=0
 
           if [ -n "$POST_URLS" ]; then
-              for entry in $POST_URLS; do
+              # Re-parse robustly.
+              while read -r entry; do
+                if [ -z "$entry" ]; then continue; fi
+                
                 process_post "$entry" &
                 
                 current_post_jobs=$((current_post_jobs + 1))
@@ -298,7 +273,7 @@ jobs:
                   wait -n
                   current_post_jobs=$((current_post_jobs - 1))
                 fi
-              done
+              done <<< "$POST_URLS"
               wait
           fi
           
