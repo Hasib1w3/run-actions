@@ -237,8 +237,6 @@ jobs:
           
           for entry in $URLS; do
             process_get "$entry" &
-            
-            # Simple robust parallel loop (Wait -n)
             while [ "$(jobs -r | wc -l)" -ge "$MAX_PARALLEL" ]; do
                 wait -n
             done
@@ -260,11 +258,28 @@ jobs:
 
             token=$(get_token "$token_var")
             
-            # Capture response
-            RESP=$(curl -s -S -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
-                 -H "Authorization: Bearer $token" \
-                 -d "$payload" --max-time 45 "$url")
+            # Curl Options Improved for debugging concurrency timeouts
+            # --no-keepalive: prevent reuse hanging
+            # --retry 2: attempt transient network failures
             
+            RESP=$(curl -s -S -w "\n%{http_code}" -X POST \
+                 -H "Content-Type: application/json" \
+                 -H "Authorization: Bearer $token" \
+                 -d "$payload" \
+                 --max-time 50 \
+                 --retry 2 \
+                 --no-keepalive \
+                 "$url" 2>&1)
+            
+            CURL_EXIT=$?
+            
+            if [ $CURL_EXIT -ne 0 ]; then
+                echo "❌ POST FAIL (Network/Timeout): $url"
+                # Shorten error msg
+                echo "   Msg: ${RESP:0:100}..."
+                return
+            fi
+
             # Last line is status
             STATUS=$(echo "$RESP" | tail -n 1)
             # All lines except last are body
