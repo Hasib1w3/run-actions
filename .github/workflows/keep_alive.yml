@@ -6,7 +6,7 @@ name: Keep Spaces Alive
 
 on:
   schedule:
-    - cron: "0 */7 * * *" # Every 7 hours
+    - cron: "0 */7 * * *"
   workflow_dispatch:
 
 jobs:
@@ -91,229 +91,286 @@ jobs:
           TOKEN_HTYJY6_KH4CYL: ${{ secrets.HF_TOKEN_HTYJY6_KH4CYL }}
           TOKEN_HTYJY6_SZ221O: ${{ secrets.HF_TOKEN_HTYJY6_SZ221O }}
 
-          # URL List for GET Checks
-          URLS: >
-            https://gfvbf-de680g.hf.space/health|TOKEN_GFVBF_DE680G
-            https://gfvbf-ituhut.hf.space/health|TOKEN_GFVBF_ITUHUT
-            https://gfvbf-m4crhd.hf.space/health|TOKEN_GFVBF_M4CRHD
-            https://gfvbf-3zc9ib.hf.space/health|TOKEN_GFVBF_3ZC9IB
-            https://gfvbf-77s4w5.hf.space/health|TOKEN_GFVBF_77S4W5
-            https://gnbg-8pit4o.hf.space/health|TOKEN_GNBG_8PIT4O
-            https://gnbg-30mmyt.hf.space/health|TOKEN_GNBG_30MMYT
-            https://gnbg-420iuk.hf.space/health|TOKEN_GNBG_420IUK
-            https://gnbg-sodbss.hf.space/health|TOKEN_GNBG_SODBSS
-            https://gnbg-g3oqg1.hf.space/health|TOKEN_GNBG_G3OQG1
-            https://j6gep5zd-3fvrs1.hf.space/health|TOKEN_J6GEP5ZD_3FVRS1
-            https://j6gep5zd-7l0v4f.hf.space/health|TOKEN_J6GEP5ZD_7L0V4F
-            https://j6gep5zd-0cnn5o.hf.space/health|TOKEN_J6GEP5ZD_0CNN5O
-            https://j6gep5zd-l2dtmm.hf.space/health|TOKEN_J6GEP5ZD_L2DTMM
-            https://j6gep5zd-8yl4at.hf.space/health|TOKEN_J6GEP5ZD_8YL4AT
-            https://mflrj8fo-eco6m8.hf.space/health|TOKEN_MFLRJ8FO_ECO6M8
-            https://mflrj8fo-nwbb8v.hf.space/health|TOKEN_MFLRJ8FO_NWBB8V
-            https://mflrj8fo-rt3c8e.hf.space/health|TOKEN_MFLRJ8FO_RT3C8E
-            https://mflrj8fo-8m5e7u.hf.space/health|TOKEN_MFLRJ8FO_8M5E7U
-            https://mflrj8fo-wtl63p.hf.space/health|TOKEN_MFLRJ8FO_WTL63P
-            https://84q1hgye-r254i7.hf.space/health|TOKEN_84Q1HGYE_R254I7
-            https://84q1hgye-f08486.hf.space/health|TOKEN_84Q1HGYE_F08486
-            https://84q1hgye-vlfcxb.hf.space/health|TOKEN_84Q1HGYE_VLFCXB
-            https://84q1hgye-55vyuq.hf.space/health|TOKEN_84Q1HGYE_55VYUQ
-            https://84q1hgye-8pj8wk.hf.space/health|TOKEN_84Q1HGYE_8PJ8WK
-            https://bwx2linr-mv2tpx.hf.space/health|TOKEN_BWX2LINR_MV2TPX
-            https://bwx2linr-gafbtm.hf.space/health|TOKEN_BWX2LINR_GAFBTM
-            https://bwx2linr-o0p0gr.hf.space/health|TOKEN_BWX2LINR_O0P0GR
-            https://bwx2linr-kz81lv.hf.space/health|TOKEN_BWX2LINR_KZ81LV
-            https://bwx2linr-qwmx4a.hf.space/health|TOKEN_BWX2LINR_QWMX4A
-            https://36mwojik-zzc7jz.hf.space/health|TOKEN_36MWOJIK_ZZC7JZ
-            https://36mwojik-zyfe36.hf.space/health|TOKEN_36MWOJIK_ZYFE36
-            https://36mwojik-ro84wa.hf.space/health|TOKEN_36MWOJIK_RO84WA
-            https://36mwojik-rh650q.hf.space/health|TOKEN_36MWOJIK_RH650Q
-            https://36mwojik-apqvb4.hf.space/health|TOKEN_36MWOJIK_APQVB4
-            https://1cyztrkj-jljvdj.hf.space/health|TOKEN_1CYZTRKJ_JLJVDJ
-            https://1cyztrkj-3u4h8f.hf.space/health|TOKEN_1CYZTRKJ_3U4H8F
-            https://1cyztrkj-bthbka.hf.space/health|TOKEN_1CYZTRKJ_BTHBKA
-            https://1cyztrkj-tpsnyp.hf.space/health|TOKEN_1CYZTRKJ_TPSNYP
-            https://1cyztrkj-2sqfl3.hf.space/health|TOKEN_1CYZTRKJ_2SQFL3
-            https://gpb77dws-1much9.hf.space/health|TOKEN_GPB77DWS_1MUCH9
-            https://gpb77dws-9vh5sq.hf.space/health|TOKEN_GPB77DWS_9VH5SQ
-            https://gpb77dws-itc3ro.hf.space/health|TOKEN_GPB77DWS_ITC3RO
-            https://gpb77dws-tzxo6z.hf.space/health|TOKEN_GPB77DWS_TZXO6Z
-            https://gpb77dws-d36c70.hf.space/health|TOKEN_GPB77DWS_D36C70
-            https://rpfcg5xn-21jgwb.hf.space/health|TOKEN_RPFCG5XN_21JGWB
-            https://rpfcg5xn-w9mqvx.hf.space/health|TOKEN_RPFCG5XN_W9MQVX
-            https://rpfcg5xn-1qaxai.hf.space/health|TOKEN_RPFCG5XN_1QAXAI
-            https://rpfcg5xn-sya62w.hf.space/health|TOKEN_RPFCG5XN_SYA62W
-            https://rpfcg5xn-34xgkl.hf.space/health|TOKEN_RPFCG5XN_34XGKL
-            https://vd2eyqev-limluk.hf.space/health|TOKEN_VD2EYQEV_LIMLUK
-            https://vd2eyqev-y0zs3e.hf.space/health|TOKEN_VD2EYQEV_Y0ZS3E
-            https://vd2eyqev-vgork7.hf.space/health|TOKEN_VD2EYQEV_VGORK7
-            https://vd2eyqev-bkk9sd.hf.space/health|TOKEN_VD2EYQEV_BKK9SD
-            https://vd2eyqev-kwluj2.hf.space/health|TOKEN_VD2EYQEV_KWLUJ2
-            https://hasibxx2x-ri7k84.hf.space/health|TOKEN_HASIBXX2X_RI7K84
-            https://hasibxx2x-o7dgr2.hf.space/health|TOKEN_HASIBXX2X_O7DGR2
-            https://hasibxx2x-mvz6t3.hf.space/health|TOKEN_HASIBXX2X_MVZ6T3
-            https://hasibxx2x-ypmy0w.hf.space/health|TOKEN_HASIBXX2X_YPMY0W
-            https://hasibxx2x-atva7e.hf.space/health|TOKEN_HASIBXX2X_ATVA7E
-            https://bdfbefbh-a5y2ft.hf.space/health|TOKEN_BDFBEFBH_A5Y2FT
-            https://bdfbefbh-j9omjg.hf.space/health|TOKEN_BDFBEFBH_J9OMJG
-            https://bdfbefbh-bag8nr.hf.space/health|TOKEN_BDFBEFBH_BAG8NR
-            https://bdfbefbh-pqluok.hf.space/health|TOKEN_BDFBEFBH_PQLUOK
-            https://bdfbefbh-7wozne.hf.space/health|TOKEN_BDFBEFBH_7WOZNE
-            https://muhammadshahalamsheikh-1m51qm.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_1M51QM
-            https://muhammadshahalamsheikh-w18wnt.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_W18WNT
-            https://muhammadshahalamsheikh-co4ghu.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_CO4GHU
-            https://muhammadshahalamsheikh-pj3rz5.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_PJ3RZ5
-            https://muhammadshahalamsheikh-uw0tml.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_UW0TML
-            https://htyjy6-rft12o.hf.space/health|TOKEN_HTYJY6_RFT12O
-            https://htyjy6-nhcbs3.hf.space/health|TOKEN_HTYJY6_NHCBS3
-            https://htyjy6-w9jmta.hf.space/health|TOKEN_HTYJY6_W9JMTA
-            https://htyjy6-kh4cyl.hf.space/health|TOKEN_HTYJY6_KH4CYL
-            https://htyjy6-sz221o.hf.space/health|TOKEN_HTYJY6_SZ221O
-          
-          # URL List for POST Checks (Gemini only)
-          POST_URLS: >
-            https://mflrj8fo-eco6m8.hf.space/generate|TOKEN_MFLRJ8FO_ECO6M8|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://mflrj8fo-nwbb8v.hf.space/generate|TOKEN_MFLRJ8FO_NWBB8V|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://mflrj8fo-rt3c8e.hf.space/generate|TOKEN_MFLRJ8FO_RT3C8E|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://mflrj8fo-8m5e7u.hf.space/generate|TOKEN_MFLRJ8FO_8M5E7U|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://mflrj8fo-wtl63p.hf.space/generate|TOKEN_MFLRJ8FO_WTL63P|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-r254i7.hf.space/generate|TOKEN_84Q1HGYE_R254I7|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-f08486.hf.space/generate|TOKEN_84Q1HGYE_F08486|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-vlfcxb.hf.space/generate|TOKEN_84Q1HGYE_VLFCXB|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-55vyuq.hf.space/generate|TOKEN_84Q1HGYE_55VYUQ|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-8pj8wk.hf.space/generate|TOKEN_84Q1HGYE_8PJ8WK|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-mv2tpx.hf.space/generate|TOKEN_BWX2LINR_MV2TPX|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-gafbtm.hf.space/generate|TOKEN_BWX2LINR_GAFBTM|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-o0p0gr.hf.space/generate|TOKEN_BWX2LINR_O0P0GR|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-kz81lv.hf.space/generate|TOKEN_BWX2LINR_KZ81LV|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-qwmx4a.hf.space/generate|TOKEN_BWX2LINR_QWMX4A|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://36mwojik-zzc7jz.hf.space/generate|TOKEN_36MWOJIK_ZZC7JZ|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://36mwojik-zyfe36.hf.space/generate|TOKEN_36MWOJIK_ZYFE36|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://36mwojik-ro84wa.hf.space/generate|TOKEN_36MWOJIK_RO84WA|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://36mwojik-rh650q.hf.space/generate|TOKEN_36MWOJIK_RH650Q|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://36mwojik-apqvb4.hf.space/generate|TOKEN_36MWOJIK_APQVB4|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://1cyztrkj-jljvdj.hf.space/generate|TOKEN_1CYZTRKJ_JLJVDJ|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://1cyztrkj-3u4h8f.hf.space/generate|TOKEN_1CYZTRKJ_3U4H8F|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://1cyztrkj-bthbka.hf.space/generate|TOKEN_1CYZTRKJ_BTHBKA|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://1cyztrkj-tpsnyp.hf.space/generate|TOKEN_1CYZTRKJ_TPSNYP|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://1cyztrkj-2sqfl3.hf.space/generate|TOKEN_1CYZTRKJ_2SQFL3|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-        
         run: |
+          #!/bin/bash
+          
+          # CRITICAL: Don't exit on errors - we want ALL requests to complete
+          set +e
+          
+          # Temp files for results
+          GET_RESULTS=$(mktemp)
+          POST_RESULTS=$(mktemp)
+          trap "rm -f $GET_RESULTS $POST_RESULTS" EXIT
+          
+          # Token getter function
           get_token() {
-            var_name=$1
-            # indirect variable reference in bash
+            local var_name=$1
             echo "${!var_name}"
           }
-
-          echo "🚀 Starting Parallel GET Checks (Max 20 concurrently)..."
           
-          process_get() {
-            entry=$1
-            if [ -z "$entry" ]; then return; fi
+          # ============================================================
+          # GET REQUESTS
+          # ============================================================
+          
+          do_get() {
+            local entry="$1"
+            local results_file="$2"
             
-            url="${entry%|*}"
-            token_var="${entry#*|}"
-
-            if [ "$token_var" == "NONE" ]; then
-              STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 "$url")
-            else
-              token=$(get_token "$token_var")
-              if [ -z "$token" ]; then
-                 echo "⚠️ Token variable '$token_var' is empty. URL: $url"
-              fi
-              STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 -H "Authorization: Bearer $token" "$url")
+            [[ -z "$entry" ]] && return
+            
+            local url="${entry%|*}"
+            local token_var="${entry#*|}"
+            local token=""
+            local status=""
+            
+            if [[ "$token_var" != "NONE" ]]; then
+              token="${!token_var}"
             fi
             
-            if [[ "$STATUS" =~ ^(200|405|401)$ ]]; then
-               echo "✅ GET OK ($STATUS): $url"
+            if [[ -n "$token" ]]; then
+              status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 -H "Authorization: Bearer $token" "$url" 2>/dev/null || echo "000")
             else
-               echo "❌ GET FAIL ($STATUS): $url"
+              status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$url" 2>/dev/null || echo "000")
             fi
-          }
-
-          export -f process_get
-          export -f get_token
-          
-          MAX_PARALLEL=20
-          
-          for entry in $URLS; do
-            process_get "$entry" &
-            while [ "$(jobs -r | wc -l)" -ge "$MAX_PARALLEL" ]; do
-                wait -n
-            done
-          done
-          # MUST WAIT FOR REMAINDER
-          wait
-
-          # ------------------------------------------------------------
-          
-          echo -e "\n🚀 Starting Parallel POST Checks (Max 15 concurrently)..."
-          
-          process_post() {
-            entry=$1
-            if [ -z "$entry" ]; then return; fi
             
-            url=$(echo "$entry" | cut -d'|' -f1)
-            token_var=$(echo "$entry" | cut -d'|' -f2)
-            payload=$(echo "$entry" | cut -d'|' -f3)
-
-            token=$(get_token "$token_var")
-            
-            # Curl Options Improved for debugging concurrency timeouts
-            # --no-keepalive: prevent reuse hanging
-            # --retry 2: attempt transient network failures
-            
-            RESP=$(curl -s -S -w "\n%{http_code}" -X POST \
-                 -H "Content-Type: application/json" \
-                 -H "Authorization: Bearer $token" \
-                 -d "$payload" \
-                 --max-time 50 \
-                 --retry 2 \
-                 --no-keepalive \
-                 "$url" 2>&1)
-            
-            CURL_EXIT=$?
-            
-            if [ $CURL_EXIT -ne 0 ]; then
-                echo "❌ POST FAIL (Network/Timeout): $url"
-                # Shorten error msg
-                echo "   Msg: ${RESP:0:100}..."
-                return
-            fi
-
-            # Last line is status
-            STATUS=$(echo "$RESP" | tail -n 1)
-            # All lines except last are body
-            BODY=$(echo "$RESP" | head -n -1)
-
-            if [ "$STATUS" -eq 200 ]; then
-               echo "✅ POST OK (200): $url"
+            if [[ "$status" =~ ^(200|405|401)$ ]]; then
+              echo "✅ GET OK ($status): $url" >> "$results_file"
             else
-               echo "❌ POST FAIL ($STATUS): $url"
-               echo "   Reason: ${BODY:0:150}..."
+              echo "❌ GET FAIL ($status): $url" >> "$results_file"
             fi
           }
           
-          export -f process_post
-
-          MAX_POST_PARALLEL=15
+          export -f get_token do_get
+          
+          # ============================================================
+          # POST REQUESTS
+          # ============================================================
+          
+          do_post() {
+            local entry="$1"
+            local results_file="$2"
+            
+            [[ -z "$entry" ]] && return
+            
+            local url=$(echo "$entry" | cut -d'|' -f1)
+            local token_var=$(echo "$entry" | cut -d'|' -f2)
+            local payload=$(echo "$entry" | cut -d'|' -f3-)
+            local token="${!token_var}"
+            
+            # Create temp file for this request's response
+            local tmp_response=$(mktemp)
+            
+            local http_code=$(curl -s -w "%{http_code}" -o "$tmp_response" \
+              -X POST \
+              -H "Content-Type: application/json" \
+              -H "Authorization: Bearer $token" \
+              -d "$payload" \
+              --max-time 120 \
+              --connect-timeout 30 \
+              "$url" 2>/dev/null || echo "000")
+            
+            local body=$(cat "$tmp_response" 2>/dev/null | head -c 200)
+            rm -f "$tmp_response"
+            
+            if [[ "$http_code" == "200" ]]; then
+              echo "✅ POST OK (200): $url" >> "$results_file"
+              echo "   Response: ${body:0:100}" >> "$results_file"
+            else
+              echo "❌ POST FAIL ($http_code): $url" >> "$results_file"
+              echo "   Response: ${body:0:150}" >> "$results_file"
+            fi
+          }
+          
+          export -f do_post
+          
+          # ============================================================
+          # URL LISTS
+          # ============================================================
+          
+          GET_URLS=(
+            "https://gfvbf-de680g.hf.space/health|TOKEN_GFVBF_DE680G"
+            "https://gfvbf-ituhut.hf.space/health|TOKEN_GFVBF_ITUHUT"
+            "https://gfvbf-m4crhd.hf.space/health|TOKEN_GFVBF_M4CRHD"
+            "https://gfvbf-3zc9ib.hf.space/health|TOKEN_GFVBF_3ZC9IB"
+            "https://gfvbf-77s4w5.hf.space/health|TOKEN_GFVBF_77S4W5"
+            "https://gnbg-8pit4o.hf.space/health|TOKEN_GNBG_8PIT4O"
+            "https://gnbg-30mmyt.hf.space/health|TOKEN_GNBG_30MMYT"
+            "https://gnbg-420iuk.hf.space/health|TOKEN_GNBG_420IUK"
+            "https://gnbg-sodbss.hf.space/health|TOKEN_GNBG_SODBSS"
+            "https://gnbg-g3oqg1.hf.space/health|TOKEN_GNBG_G3OQG1"
+            "https://j6gep5zd-3fvrs1.hf.space/health|TOKEN_J6GEP5ZD_3FVRS1"
+            "https://j6gep5zd-7l0v4f.hf.space/health|TOKEN_J6GEP5ZD_7L0V4F"
+            "https://j6gep5zd-0cnn5o.hf.space/health|TOKEN_J6GEP5ZD_0CNN5O"
+            "https://j6gep5zd-l2dtmm.hf.space/health|TOKEN_J6GEP5ZD_L2DTMM"
+            "https://j6gep5zd-8yl4at.hf.space/health|TOKEN_J6GEP5ZD_8YL4AT"
+            "https://mflrj8fo-eco6m8.hf.space/health|TOKEN_MFLRJ8FO_ECO6M8"
+            "https://mflrj8fo-nwbb8v.hf.space/health|TOKEN_MFLRJ8FO_NWBB8V"
+            "https://mflrj8fo-rt3c8e.hf.space/health|TOKEN_MFLRJ8FO_RT3C8E"
+            "https://mflrj8fo-8m5e7u.hf.space/health|TOKEN_MFLRJ8FO_8M5E7U"
+            "https://mflrj8fo-wtl63p.hf.space/health|TOKEN_MFLRJ8FO_WTL63P"
+            "https://84q1hgye-r254i7.hf.space/health|TOKEN_84Q1HGYE_R254I7"
+            "https://84q1hgye-f08486.hf.space/health|TOKEN_84Q1HGYE_F08486"
+            "https://84q1hgye-vlfcxb.hf.space/health|TOKEN_84Q1HGYE_VLFCXB"
+            "https://84q1hgye-55vyuq.hf.space/health|TOKEN_84Q1HGYE_55VYUQ"
+            "https://84q1hgye-8pj8wk.hf.space/health|TOKEN_84Q1HGYE_8PJ8WK"
+            "https://bwx2linr-mv2tpx.hf.space/health|TOKEN_BWX2LINR_MV2TPX"
+            "https://bwx2linr-gafbtm.hf.space/health|TOKEN_BWX2LINR_GAFBTM"
+            "https://bwx2linr-o0p0gr.hf.space/health|TOKEN_BWX2LINR_O0P0GR"
+            "https://bwx2linr-kz81lv.hf.space/health|TOKEN_BWX2LINR_KZ81LV"
+            "https://bwx2linr-qwmx4a.hf.space/health|TOKEN_BWX2LINR_QWMX4A"
+            "https://36mwojik-zzc7jz.hf.space/health|TOKEN_36MWOJIK_ZZC7JZ"
+            "https://36mwojik-zyfe36.hf.space/health|TOKEN_36MWOJIK_ZYFE36"
+            "https://36mwojik-ro84wa.hf.space/health|TOKEN_36MWOJIK_RO84WA"
+            "https://36mwojik-rh650q.hf.space/health|TOKEN_36MWOJIK_RH650Q"
+            "https://36mwojik-apqvb4.hf.space/health|TOKEN_36MWOJIK_APQVB4"
+            "https://1cyztrkj-jljvdj.hf.space/health|TOKEN_1CYZTRKJ_JLJVDJ"
+            "https://1cyztrkj-3u4h8f.hf.space/health|TOKEN_1CYZTRKJ_3U4H8F"
+            "https://1cyztrkj-bthbka.hf.space/health|TOKEN_1CYZTRKJ_BTHBKA"
+            "https://1cyztrkj-tpsnyp.hf.space/health|TOKEN_1CYZTRKJ_TPSNYP"
+            "https://1cyztrkj-2sqfl3.hf.space/health|TOKEN_1CYZTRKJ_2SQFL3"
+            "https://gpb77dws-1much9.hf.space/health|TOKEN_GPB77DWS_1MUCH9"
+            "https://gpb77dws-9vh5sq.hf.space/health|TOKEN_GPB77DWS_9VH5SQ"
+            "https://gpb77dws-itc3ro.hf.space/health|TOKEN_GPB77DWS_ITC3RO"
+            "https://gpb77dws-tzxo6z.hf.space/health|TOKEN_GPB77DWS_TZXO6Z"
+            "https://gpb77dws-d36c70.hf.space/health|TOKEN_GPB77DWS_D36C70"
+            "https://rpfcg5xn-21jgwb.hf.space/health|TOKEN_RPFCG5XN_21JGWB"
+            "https://rpfcg5xn-w9mqvx.hf.space/health|TOKEN_RPFCG5XN_W9MQVX"
+            "https://rpfcg5xn-1qaxai.hf.space/health|TOKEN_RPFCG5XN_1QAXAI"
+            "https://rpfcg5xn-sya62w.hf.space/health|TOKEN_RPFCG5XN_SYA62W"
+            "https://rpfcg5xn-34xgkl.hf.space/health|TOKEN_RPFCG5XN_34XGKL"
+            "https://vd2eyqev-limluk.hf.space/health|TOKEN_VD2EYQEV_LIMLUK"
+            "https://vd2eyqev-y0zs3e.hf.space/health|TOKEN_VD2EYQEV_Y0ZS3E"
+            "https://vd2eyqev-vgork7.hf.space/health|TOKEN_VD2EYQEV_VGORK7"
+            "https://vd2eyqev-bkk9sd.hf.space/health|TOKEN_VD2EYQEV_BKK9SD"
+            "https://vd2eyqev-kwluj2.hf.space/health|TOKEN_VD2EYQEV_KWLUJ2"
+            "https://hasibxx2x-ri7k84.hf.space/health|TOKEN_HASIBXX2X_RI7K84"
+            "https://hasibxx2x-o7dgr2.hf.space/health|TOKEN_HASIBXX2X_O7DGR2"
+            "https://hasibxx2x-mvz6t3.hf.space/health|TOKEN_HASIBXX2X_MVZ6T3"
+            "https://hasibxx2x-ypmy0w.hf.space/health|TOKEN_HASIBXX2X_YPMY0W"
+            "https://hasibxx2x-atva7e.hf.space/health|TOKEN_HASIBXX2X_ATVA7E"
+            "https://bdfbefbh-a5y2ft.hf.space/health|TOKEN_BDFBEFBH_A5Y2FT"
+            "https://bdfbefbh-j9omjg.hf.space/health|TOKEN_BDFBEFBH_J9OMJG"
+            "https://bdfbefbh-bag8nr.hf.space/health|TOKEN_BDFBEFBH_BAG8NR"
+            "https://bdfbefbh-pqluok.hf.space/health|TOKEN_BDFBEFBH_PQLUOK"
+            "https://bdfbefbh-7wozne.hf.space/health|TOKEN_BDFBEFBH_7WOZNE"
+            "https://muhammadshahalamsheikh-1m51qm.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_1M51QM"
+            "https://muhammadshahalamsheikh-w18wnt.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_W18WNT"
+            "https://muhammadshahalamsheikh-co4ghu.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_CO4GHU"
+            "https://muhammadshahalamsheikh-pj3rz5.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_PJ3RZ5"
+            "https://muhammadshahalamsheikh-uw0tml.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_UW0TML"
+            "https://htyjy6-rft12o.hf.space/health|TOKEN_HTYJY6_RFT12O"
+            "https://htyjy6-nhcbs3.hf.space/health|TOKEN_HTYJY6_NHCBS3"
+            "https://htyjy6-w9jmta.hf.space/health|TOKEN_HTYJY6_W9JMTA"
+            "https://htyjy6-kh4cyl.hf.space/health|TOKEN_HTYJY6_KH4CYL"
+            "https://htyjy6-sz221o.hf.space/health|TOKEN_HTYJY6_SZ221O"
+          )
+          
+          POST_URLS=(
+            "https://mflrj8fo-eco6m8.hf.space/generate|TOKEN_MFLRJ8FO_ECO6M8|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://mflrj8fo-nwbb8v.hf.space/generate|TOKEN_MFLRJ8FO_NWBB8V|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://mflrj8fo-rt3c8e.hf.space/generate|TOKEN_MFLRJ8FO_RT3C8E|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://mflrj8fo-8m5e7u.hf.space/generate|TOKEN_MFLRJ8FO_8M5E7U|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://mflrj8fo-wtl63p.hf.space/generate|TOKEN_MFLRJ8FO_WTL63P|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://84q1hgye-r254i7.hf.space/generate|TOKEN_84Q1HGYE_R254I7|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://84q1hgye-f08486.hf.space/generate|TOKEN_84Q1HGYE_F08486|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://84q1hgye-vlfcxb.hf.space/generate|TOKEN_84Q1HGYE_VLFCXB|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://84q1hgye-55vyuq.hf.space/generate|TOKEN_84Q1HGYE_55VYUQ|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://84q1hgye-8pj8wk.hf.space/generate|TOKEN_84Q1HGYE_8PJ8WK|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://bwx2linr-mv2tpx.hf.space/generate|TOKEN_BWX2LINR_MV2TPX|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://bwx2linr-gafbtm.hf.space/generate|TOKEN_BWX2LINR_GAFBTM|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://bwx2linr-o0p0gr.hf.space/generate|TOKEN_BWX2LINR_O0P0GR|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://bwx2linr-kz81lv.hf.space/generate|TOKEN_BWX2LINR_KZ81LV|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://bwx2linr-qwmx4a.hf.space/generate|TOKEN_BWX2LINR_QWMX4A|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://36mwojik-zzc7jz.hf.space/generate|TOKEN_36MWOJIK_ZZC7JZ|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://36mwojik-zyfe36.hf.space/generate|TOKEN_36MWOJIK_ZYFE36|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://36mwojik-ro84wa.hf.space/generate|TOKEN_36MWOJIK_RO84WA|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://36mwojik-rh650q.hf.space/generate|TOKEN_36MWOJIK_RH650Q|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://36mwojik-apqvb4.hf.space/generate|TOKEN_36MWOJIK_APQVB4|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://1cyztrkj-jljvdj.hf.space/generate|TOKEN_1CYZTRKJ_JLJVDJ|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://1cyztrkj-3u4h8f.hf.space/generate|TOKEN_1CYZTRKJ_3U4H8F|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://1cyztrkj-bthbka.hf.space/generate|TOKEN_1CYZTRKJ_BTHBKA|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://1cyztrkj-tpsnyp.hf.space/generate|TOKEN_1CYZTRKJ_TPSNYP|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+            "https://1cyztrkj-2sqfl3.hf.space/generate|TOKEN_1CYZTRKJ_2SQFL3|{\"user_prompt\":\"hi\",\"system_prompt\":\"keep-alive\",\"config\":\"auto\"}"
+          )
+          
+          # ============================================================
+          # PARALLEL EXECUTION - 50 AT ONCE
+          # ============================================================
+          
+          MAX_PARALLEL=50
+          
+          echo "🚀 Starting GET Checks (${#GET_URLS[@]} URLs, $MAX_PARALLEL parallel)..."
+          echo "================================================================"
+          
           pids=()
-
-          if [ -n "$POST_URLS" ]; then
-              for entry in $POST_URLS; do
-                process_post "$entry" &
-                pids+=($!)
-                
-                # If we hit max concurrent, wait for at least one to clear
-                while [ "$(jobs -r | wc -l)" -ge "$MAX_POST_PARALLEL" ]; do
-                   wait -n
-                done
-              done
-              
-              # FINAL: Wait for EVERY specific PID we launched to finish
-              # Escape curly braces for Python f-string logic in script generation
-              for pid in "${pids[@]}"; do
-                wait $pid
-              done
-          fi
+          for entry in "${GET_URLS[@]}"; do
+            do_get "$entry" "$GET_RESULTS" &
+            pids+=($!)
+            
+            # Limit concurrency
+            if [[ ${#pids[@]} -ge $MAX_PARALLEL ]]; then
+              wait "${pids[0]}"
+              pids=("${pids[@]:1}")
+            fi
+          done
           
-          echo -e "\n✨ All health checks finished."
+          # Wait for ALL remaining GET jobs
+          for pid in "${pids[@]}"; do
+            wait "$pid" 2>/dev/null
+          done
+          
+          # Print GET results
+          echo ""
+          cat "$GET_RESULTS"
+          echo ""
+          echo "================================================================"
+          
+          # ============================================================
+          
+          echo ""
+          echo "🚀 Starting POST Checks (${#POST_URLS[@]} URLs, $MAX_PARALLEL parallel)..."
+          echo "================================================================"
+          
+          pids=()
+          for entry in "${POST_URLS[@]}"; do
+            do_post "$entry" "$POST_RESULTS" &
+            pids+=($!)
+            
+            # Limit concurrency
+            if [[ ${#pids[@]} -ge $MAX_PARALLEL ]]; then
+              wait "${pids[0]}"
+              pids=("${pids[@]:1}")
+            fi
+          done
+          
+          # Wait for ALL remaining POST jobs
+          for pid in "${pids[@]}"; do
+            wait "$pid" 2>/dev/null
+          done
+          
+          # Print POST results
+          echo ""
+          cat "$POST_RESULTS"
+          echo ""
+          echo "================================================================"
+          
+          # ============================================================
+          # SUMMARY
+          # ============================================================
+          
+          echo ""
+          echo "📊 SUMMARY"
+          echo "================================================================"
+          
+          GET_OK=$(grep -c "✅ GET OK" "$GET_RESULTS" 2>/dev/null || echo 0)
+          GET_FAIL=$(grep -c "❌ GET FAIL" "$GET_RESULTS" 2>/dev/null || echo 0)
+          POST_OK=$(grep -c "✅ POST OK" "$POST_RESULTS" 2>/dev/null || echo 0)
+          POST_FAIL=$(grep -c "❌ POST FAIL" "$POST_RESULTS" 2>/dev/null || echo 0)
+          
+          echo "GET:  ✅ $GET_OK success | ❌ $GET_FAIL failed"
+          echo "POST: ✅ $POST_OK success | ❌ $POST_FAIL failed"
+          echo ""
+          echo "✨ All health checks completed!"
+          
+          # Always exit 0 so workflow shows success
+          exit 0
