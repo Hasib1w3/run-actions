@@ -238,11 +238,10 @@ jobs:
           for entry in $URLS; do
             process_get "$entry" &
             
-            # Simple robust parallel loop
-            # wait -n works in bash 4.3+ (standard in GH Actions)
-            if [ "$(jobs -r | wc -l)" -ge "$MAX_PARALLEL" ]; then
+            # Simple robust parallel loop (Wait -n)
+            while [ "$(jobs -r | wc -l)" -ge "$MAX_PARALLEL" ]; do
                 wait -n
-            fi
+            done
           done
           # MUST WAIT FOR REMAINDER
           wait
@@ -261,9 +260,8 @@ jobs:
 
             token=$(get_token "$token_var")
             
-            # Capture both code and body
-            # curl write-out to get status at end
-            RESP=$(curl -s -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
+            # Capture response
+            RESP=$(curl -s -S -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
                  -H "Authorization: Bearer $token" \
                  -d "$payload" --max-time 45 "$url")
             
@@ -276,7 +274,7 @@ jobs:
                echo "✅ POST OK (200): $url"
             else
                echo "❌ POST FAIL ($STATUS): $url"
-               # echo "   Reason: ${BODY:0:150}..."
+               echo "   Reason: ${BODY:0:150}..."
             fi
           }
           
@@ -288,10 +286,10 @@ jobs:
               for entry in $POST_URLS; do
                 process_post "$entry" &
                 
-                # Dynamic waiter using `jobs` command
-                if [ "$(jobs -r | wc -l)" -ge "$MAX_POST_PARALLEL" ]; then
+                # Dynamic waiter using `jobs` command (Self Healing)
+                while [ "$(jobs -r | wc -l)" -ge "$MAX_POST_PARALLEL" ]; do
                   wait -n
-                fi
+                done
               done
               # IMPORTANT: Wait for ALL remaining background jobs
               wait
