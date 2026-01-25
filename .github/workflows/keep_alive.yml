@@ -210,7 +210,6 @@ jobs:
             entry=$1
             if [ -z "$entry" ]; then return; fi
             
-            # Format: url|ENV_VAR_NAME
             url="${entry%|*}"
             token_var="${entry#*|}"
 
@@ -219,7 +218,8 @@ jobs:
             else
               token=$(get_token "$token_var")
               if [ -z "$token" ]; then
-                 echo "⚠️ No token found for $url ($token_var). Check Secrets."
+                 echo "⚠️ Token variable '$token_var' is empty. URL: $url"
+                 # Continue trying without token? Or fail? Fail implies logic error.
               fi
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 -H "Authorization: Bearer $token" "$url")
             fi
@@ -231,22 +231,26 @@ jobs:
             fi
           }
 
-          # Export function for parallel subshells
           export -f process_get
           export -f get_token
           
-          # Parallel loop logic (background jobs + wait)
           MAX_PARALLEL=20
+          
+          # Create URL list temp file to allow xargs -P 
+          # xargs is generally better for process pooling than a raw bash loop wait
+          
+          echo "$URLS" > urls.txt
+          
+          # We need to loop manually though for 'process_get' as an exported bash func with args can be tricky in all envs
+          # Sticking to the semaphore loop for cross-platform robustness if needed, but let's just make sure it processes ALL.
+          
           current_jobs=0
-
-          # We iterate strictly by splitting lines
           for entry in $URLS; do
             process_get "$entry" &
-            
             current_jobs=$((current_jobs + 1))
             if [ "$current_jobs" -ge "$MAX_PARALLEL" ]; then
-              wait -n
-              current_jobs=$((current_jobs - 1))
+                wait -n
+                current_jobs=$((current_jobs - 1))
             fi
           done
           wait
@@ -255,34 +259,46 @@ jobs:
           
           echo -e "\n🚀 Starting Parallel POST Checks (Max 15 concurrently)..."
           
-          # Fix: Standard loop iteration over whitespace separated URL blocks using read -r line 
-          # prevents subshell scope issues and missing lines
+          process_post() {
+            entry=$1
+            if [ -z "$entry" ]; then return; fi
+            
+            url=$(echo "$entry" | cut -d'|' -f1)
+            token_var=$(echo "$entry" | cut -d'|' -f2)
+            payload=$(echo "$entry" | cut -d'|' -f3)
+
+            token=$(get_token "$token_var")
+            
+            # Capture response
+            RESP=$(curl -s -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
+                 -H "Authorization: Bearer $token" \
+                 -d "$payload" --max-time 45 "$url")
+            
+            STATUS=$(echo "$RESP" | tail -n 1)
+            BODY=$(echo "$RESP" | head -n -1)
+
+            if [ "$STATUS" -eq 200 ]; then
+               echo "✅ POST OK (200): $url"
+            else
+               echo "❌ POST FAIL ($STATUS): $url"
+               # echo "   Body: ${BODY:0:150}..."
+            fi
+          }
           
+          export -f process_post
+
           MAX_POST_PARALLEL=15
           current_post_jobs=0
 
           if [ -n "$POST_URLS" ]; then
-              # Save strict separator
-              OLD_IFS=$IFS
-              IFS=$'
-'
-              
-              # Loop line-by-line treating whole line as one entry
               for entry in $POST_URLS; do
-                # Trim entry just in case
-                entry=$(echo "$entry" | xargs)
-                if [ -z "$entry" ]; then continue; fi
-                
                 process_post "$entry" &
-                
                 current_post_jobs=$((current_post_jobs + 1))
                 if [ "$current_post_jobs" -ge "$MAX_POST_PARALLEL" ]; then
                   wait -n
                   current_post_jobs=$((current_post_jobs - 1))
                 fi
               done
-              
-              IFS=$OLD_IFS
               wait
           fi
           
