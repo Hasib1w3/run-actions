@@ -207,7 +207,7 @@ jobs:
 
           # ------------------------------------------------------------
           
-          echo -e "\n🚀 Starting Parallel COOKIES POST Checks..."
+          echo -e "\n🚀 Starting Serial COOKIES POST Checks..."
           
           process_post() {
             entry=$1
@@ -219,9 +219,11 @@ jobs:
 
             token=$(get_token "$token_var")
             
+            # Use 55s timeout (longer than Space execution logic) to avoid 28
+            # BUT: HF Spaces free tier sleeps containers.
             RESP=$(curl -s -S -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
                  -H "Authorization: Bearer $token" \
-                 -d "$payload" --max-time 45 "$url" 2>&1)
+                 -d "$payload" --max-time 55 "$url" 2>&1)
             
             STATUS=$(echo "$RESP" | tail -n 1)
             BODY=$(echo "$RESP" | head -n -1)
@@ -237,8 +239,11 @@ jobs:
           
           export -f process_post
 
-          # REDUCE CONCURRENCY for Heavy Puppeteer loads
-          MAX_POST_PARALLEL=5
+          # SERIAL EXECUTION (1 at a time)
+          # Why? Headless Chrome in Spaces consumes HUGE memory. 
+          # Parallel containers + parallelism INSIDE container crashes everything or network errors out.
+          
+          MAX_POST_PARALLEL=1
           pids=()
 
           if [ -n "$POST_URLS" ]; then
@@ -246,7 +251,6 @@ jobs:
                 process_post "$entry" &
                 pids+=($!)
                 
-                # Slower ramp-up to prevent container thrashing
                 # Check for active job count and wait if max reached
                 while [ "$(jobs -r | wc -l)" -ge "$MAX_POST_PARALLEL" ]; do
                    wait -n
@@ -268,7 +272,6 @@ jobs:
           GEMINI_CANDIDATES=("https://mflrj8fo-u3yi1k.hf.space/generate|TOKEN_MFLRJ8FO_U3YI1K" "https://mflrj8fo-r0py2x.hf.space/generate|TOKEN_MFLRJ8FO_R0PY2X" "https://mflrj8fo-qv3v2t.hf.space/generate|TOKEN_MFLRJ8FO_QV3V2T" "https://mflrj8fo-ngo6sj.hf.space/generate|TOKEN_MFLRJ8FO_NGO6SJ" "https://mflrj8fo-nteprv.hf.space/generate|TOKEN_MFLRJ8FO_NTEPRV" "https://84q1hgye-bflfl7.hf.space/generate|TOKEN_84Q1HGYE_BFLFL7" "https://84q1hgye-0mx2x4.hf.space/generate|TOKEN_84Q1HGYE_0MX2X4" "https://84q1hgye-ga9adj.hf.space/generate|TOKEN_84Q1HGYE_GA9ADJ" "https://84q1hgye-7klfui.hf.space/generate|TOKEN_84Q1HGYE_7KLFUI" "https://84q1hgye-9yj6mp.hf.space/generate|TOKEN_84Q1HGYE_9YJ6MP" "https://bwx2linr-xihbn0.hf.space/generate|TOKEN_BWX2LINR_XIHBN0" "https://bwx2linr-ls1gft.hf.space/generate|TOKEN_BWX2LINR_LS1GFT" "https://bwx2linr-b7ow00.hf.space/generate|TOKEN_BWX2LINR_B7OW00" "https://bwx2linr-kcayo8.hf.space/generate|TOKEN_BWX2LINR_KCAYO8" "https://bwx2linr-419zhv.hf.space/generate|TOKEN_BWX2LINR_419ZHV")
           
           if [ ${#GEMINI_CANDIDATES[@]} -gt 0 ]; then
-             # Pick random index
              RAND_INDEX=$(( RANDOM % ${#GEMINI_CANDIDATES[@]} ))
              SELECTED="${GEMINI_CANDIDATES[$RAND_INDEX]}"
              
