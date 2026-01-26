@@ -207,7 +207,7 @@ jobs:
 
           # ------------------------------------------------------------
           
-          echo -e "\n🚀 Starting Serial COOKIES POST Checks..."
+          echo -e "\n🚀 Starting STRICTLY SERIAL Cookies Checks..."
           
           process_post() {
             entry=$1
@@ -237,30 +237,10 @@ jobs:
             fi
           }
           
-          export -f process_post
-
-          # SERIAL EXECUTION (1 at a time)
-          # Why? Headless Chrome in Spaces consumes HUGE memory. 
-          # Parallel containers + parallelism INSIDE container crashes everything or network errors out.
-          
-          MAX_POST_PARALLEL=1
-          pids=()
-
+          # NO & backgrounding. Plain standard loop.
           if [ -n "$POST_URLS" ]; then
               for entry in $POST_URLS; do
-                process_post "$entry" &
-                pids+=($!)
-                
-                # Check for active job count and wait if max reached
-                while [ "$(jobs -r | wc -l)" -ge "$MAX_POST_PARALLEL" ]; do
-                   wait -n
-                done
-              done
-              
-              # FINAL: Wait
-              # Note: Wait itself returns status of last job. We want to avoid set -e failure.
-              for pid in "${pids[@]}"; do
-                wait $pid 2>/dev/null || true
+                process_post "$entry"
               done
           fi
           
@@ -272,6 +252,7 @@ jobs:
           GEMINI_CANDIDATES=("https://mflrj8fo-u3yi1k.hf.space/generate|TOKEN_MFLRJ8FO_U3YI1K" "https://mflrj8fo-r0py2x.hf.space/generate|TOKEN_MFLRJ8FO_R0PY2X" "https://mflrj8fo-qv3v2t.hf.space/generate|TOKEN_MFLRJ8FO_QV3V2T" "https://mflrj8fo-ngo6sj.hf.space/generate|TOKEN_MFLRJ8FO_NGO6SJ" "https://mflrj8fo-nteprv.hf.space/generate|TOKEN_MFLRJ8FO_NTEPRV" "https://84q1hgye-bflfl7.hf.space/generate|TOKEN_84Q1HGYE_BFLFL7" "https://84q1hgye-0mx2x4.hf.space/generate|TOKEN_84Q1HGYE_0MX2X4" "https://84q1hgye-ga9adj.hf.space/generate|TOKEN_84Q1HGYE_GA9ADJ" "https://84q1hgye-7klfui.hf.space/generate|TOKEN_84Q1HGYE_7KLFUI" "https://84q1hgye-9yj6mp.hf.space/generate|TOKEN_84Q1HGYE_9YJ6MP" "https://bwx2linr-xihbn0.hf.space/generate|TOKEN_BWX2LINR_XIHBN0" "https://bwx2linr-ls1gft.hf.space/generate|TOKEN_BWX2LINR_LS1GFT" "https://bwx2linr-b7ow00.hf.space/generate|TOKEN_BWX2LINR_B7OW00" "https://bwx2linr-kcayo8.hf.space/generate|TOKEN_BWX2LINR_KCAYO8" "https://bwx2linr-419zhv.hf.space/generate|TOKEN_BWX2LINR_419ZHV")
           
           if [ ${#GEMINI_CANDIDATES[@]} -gt 0 ]; then
+             # Pick random index
              RAND_INDEX=$(( RANDOM % ${#GEMINI_CANDIDATES[@]} ))
              SELECTED="${GEMINI_CANDIDATES[$RAND_INDEX]}"
              
