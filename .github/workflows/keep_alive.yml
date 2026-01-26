@@ -219,21 +219,28 @@ jobs:
 
             token=$(get_token "$token_var")
             
-            # Use 55s timeout (longer than Space execution logic) to avoid 28
-            # BUT: HF Spaces free tier sleeps containers.
+            # Using very safe flags. 
+            # -f (fail) is avoided because we handle HTTP codes.
+            # Timeout extended to 90s to tolerate single slow Space cold-starts
             RESP=$(curl -s -S -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
                  -H "Authorization: Bearer $token" \
-                 -d "$payload" --max-time 55 "$url" 2>&1)
+                 -d "$payload" --max-time 90 --connect-timeout 20 "$url" 2>&1)
             
             STATUS=$(echo "$RESP" | tail -n 1)
             BODY=$(echo "$RESP" | head -n -1)
 
-            if [ "$STATUS" -eq 200 ]; then
+            # Robust logging
+            if [[ "$STATUS" == "200" ]]; then
                echo "✅ COOKIE OK (200): $url"
                echo "   Result: $BODY"
             else
-               echo "❌ COOKIE FAIL ($STATUS): $url"
-               echo "   Reason: ${BODY:0:300}..."
+               # Catch non-numeric error states too (like curl 28 timeout code)
+               if [[ ! "$STATUS" =~ ^[0-9]+$ ]]; then
+                   echo "❌ NET ERROR: $url - $RESP"
+               else
+                   echo "❌ FAIL ($STATUS): $url"
+                   echo "   Reason: ${BODY:0:300}..."
+               fi
             fi
           }
           
