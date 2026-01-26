@@ -219,7 +219,6 @@ jobs:
 
             token=$(get_token "$token_var")
             
-            # Robust POST check - show response snippet if failed
             RESP=$(curl -s -S -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
                  -H "Authorization: Bearer $token" \
                  -d "$payload" --max-time 45 "$url" 2>&1)
@@ -231,8 +230,6 @@ jobs:
                echo "✅ COOKIE OK (200): $url"
                echo "   Result: $BODY"
             else
-               # 500 etc. logic
-               # We simply log it and continue. Do NOT crash or set exit 1 manually
                echo "❌ COOKIE FAIL ($STATUS): $url"
                echo "   Reason: ${BODY:0:300}..."
             fi
@@ -240,9 +237,8 @@ jobs:
           
           export -f process_post
 
-          MAX_POST_PARALLEL=15
-          
-          # Use manual PID tracking to ensure wait synchronization
+          # REDUCE CONCURRENCY for Heavy Puppeteer loads
+          MAX_POST_PARALLEL=5
           pids=()
 
           if [ -n "$POST_URLS" ]; then
@@ -250,6 +246,8 @@ jobs:
                 process_post "$entry" &
                 pids+=($!)
                 
+                # Slower ramp-up to prevent container thrashing
+                # Check for active job count and wait if max reached
                 while [ "$(jobs -r | wc -l)" -ge "$MAX_POST_PARALLEL" ]; do
                    wait -n
                 done
