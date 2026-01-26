@@ -229,10 +229,12 @@ jobs:
 
             if [ "$STATUS" -eq 200 ]; then
                echo "✅ COOKIE OK (200): $url"
+               echo "   Result: $BODY"
             else
+               # 500 etc. logic
+               # We simply log it and continue. Do NOT crash or set exit 1 manually
                echo "❌ COOKIE FAIL ($STATUS): $url"
-               # Truncated error snippet
-               echo "   Reason: ${BODY:0:150}..."
+               echo "   Reason: ${BODY:0:300}..."
             fi
           }
           
@@ -248,15 +250,15 @@ jobs:
                 process_post "$entry" &
                 pids+=($!)
                 
-                # Check for active job count and wait if max reached
                 while [ "$(jobs -r | wc -l)" -ge "$MAX_POST_PARALLEL" ]; do
                    wait -n
                 done
               done
               
-              # FINAL: Wait for EVERY specific PID we launched
+              # FINAL: Wait
+              # Note: Wait itself returns status of last job. We want to avoid set -e failure.
               for pid in "${pids[@]}"; do
-                wait $pid 2>/dev/null
+                wait $pid 2>/dev/null || true
               done
           fi
           
