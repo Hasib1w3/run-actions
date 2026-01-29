@@ -1,4 +1,4 @@
-name: Keep Spaces Alive
+name: Keep Spaces Alive (GET only)
 
 on:
   schedule:
@@ -9,160 +9,161 @@ jobs:
   ping_spaces:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Health Checks
+      - name: Run Health Checks (GET /health)
         env:
-          TOKEN_GFVBF_CEA8AE: ${{ secrets.HF_TOKEN_GFVBF_CEA8AE }}
-          TOKEN_GFVBF_VDWFLI: ${{ secrets.HF_TOKEN_GFVBF_VDWFLI }}
-          TOKEN_GFVBF_B7X4M3: ${{ secrets.HF_TOKEN_GFVBF_B7X4M3 }}
-          TOKEN_GFVBF_9SPERN: ${{ secrets.HF_TOKEN_GFVBF_9SPERN }}
-          TOKEN_GFVBF_03HOZU: ${{ secrets.HF_TOKEN_GFVBF_03HOZU }}
-          TOKEN_GNBG_1LHK7V: ${{ secrets.HF_TOKEN_GNBG_1LHK7V }}
-          TOKEN_GNBG_T0298Y: ${{ secrets.HF_TOKEN_GNBG_T0298Y }}
-          TOKEN_GNBG_10D483: ${{ secrets.HF_TOKEN_GNBG_10D483 }}
-          TOKEN_GNBG_41LC8Y: ${{ secrets.HF_TOKEN_GNBG_41LC8Y }}
-          TOKEN_GNBG_8ZTOMZ: ${{ secrets.HF_TOKEN_GNBG_8ZTOMZ }}
-          TOKEN_J6GEP5ZD_E1NFR8: ${{ secrets.HF_TOKEN_J6GEP5ZD_E1NFR8 }}
-          TOKEN_J6GEP5ZD_97UVDE: ${{ secrets.HF_TOKEN_J6GEP5ZD_97UVDE }}
-          TOKEN_J6GEP5ZD_IUTW7W: ${{ secrets.HF_TOKEN_J6GEP5ZD_IUTW7W }}
-          TOKEN_J6GEP5ZD_V4V0VT: ${{ secrets.HF_TOKEN_J6GEP5ZD_V4V0VT }}
-          TOKEN_J6GEP5ZD_WHKLVJ: ${{ secrets.HF_TOKEN_J6GEP5ZD_WHKLVJ }}
-          TOKEN_MFLRJ8FO_U3YI1K: ${{ secrets.HF_TOKEN_MFLRJ8FO_U3YI1K }}
-          TOKEN_MFLRJ8FO_R0PY2X: ${{ secrets.HF_TOKEN_MFLRJ8FO_R0PY2X }}
-          TOKEN_MFLRJ8FO_QV3V2T: ${{ secrets.HF_TOKEN_MFLRJ8FO_QV3V2T }}
-          TOKEN_MFLRJ8FO_NGO6SJ: ${{ secrets.HF_TOKEN_MFLRJ8FO_NGO6SJ }}
-          TOKEN_MFLRJ8FO_NTEPRV: ${{ secrets.HF_TOKEN_MFLRJ8FO_NTEPRV }}
-          TOKEN_84Q1HGYE_BFLFL7: ${{ secrets.HF_TOKEN_84Q1HGYE_BFLFL7 }}
-          TOKEN_84Q1HGYE_0MX2X4: ${{ secrets.HF_TOKEN_84Q1HGYE_0MX2X4 }}
-          TOKEN_84Q1HGYE_GA9ADJ: ${{ secrets.HF_TOKEN_84Q1HGYE_GA9ADJ }}
-          TOKEN_84Q1HGYE_7KLFUI: ${{ secrets.HF_TOKEN_84Q1HGYE_7KLFUI }}
-          TOKEN_84Q1HGYE_9YJ6MP: ${{ secrets.HF_TOKEN_84Q1HGYE_9YJ6MP }}
-          TOKEN_BWX2LINR_XIHBN0: ${{ secrets.HF_TOKEN_BWX2LINR_XIHBN0 }}
-          TOKEN_BWX2LINR_LS1GFT: ${{ secrets.HF_TOKEN_BWX2LINR_LS1GFT }}
-          TOKEN_BWX2LINR_B7OW00: ${{ secrets.HF_TOKEN_BWX2LINR_B7OW00 }}
-          TOKEN_BWX2LINR_KCAYO8: ${{ secrets.HF_TOKEN_BWX2LINR_KCAYO8 }}
-          TOKEN_BWX2LINR_419ZHV: ${{ secrets.HF_TOKEN_BWX2LINR_419ZHV }}
-          TOKEN_GPB77DWS_S2JYWF: ${{ secrets.HF_TOKEN_GPB77DWS_S2JYWF }}
-          TOKEN_GPB77DWS_JAWYR0: ${{ secrets.HF_TOKEN_GPB77DWS_JAWYR0 }}
-          TOKEN_GPB77DWS_LRS7I5: ${{ secrets.HF_TOKEN_GPB77DWS_LRS7I5 }}
-          TOKEN_GPB77DWS_B5SGQU: ${{ secrets.HF_TOKEN_GPB77DWS_B5SGQU }}
-          TOKEN_GPB77DWS_B4S0K3: ${{ secrets.HF_TOKEN_GPB77DWS_B4S0K3 }}
-          TOKEN_RPFCG5XN_F5DUOX: ${{ secrets.HF_TOKEN_RPFCG5XN_F5DUOX }}
-          TOKEN_RPFCG5XN_JWNUYP: ${{ secrets.HF_TOKEN_RPFCG5XN_JWNUYP }}
-          TOKEN_RPFCG5XN_T3XKGZ: ${{ secrets.HF_TOKEN_RPFCG5XN_T3XKGZ }}
-          TOKEN_RPFCG5XN_NT60XE: ${{ secrets.HF_TOKEN_RPFCG5XN_NT60XE }}
-          TOKEN_RPFCG5XN_4AHQZE: ${{ secrets.HF_TOKEN_RPFCG5XN_4AHQZE }}
-          TOKEN_VD2EYQEV_44UYPS: ${{ secrets.HF_TOKEN_VD2EYQEV_44UYPS }}
-          TOKEN_VD2EYQEV_46QBCS: ${{ secrets.HF_TOKEN_VD2EYQEV_46QBCS }}
-          TOKEN_VD2EYQEV_8ML5CA: ${{ secrets.HF_TOKEN_VD2EYQEV_8ML5CA }}
-          TOKEN_VD2EYQEV_02GRZJ: ${{ secrets.HF_TOKEN_VD2EYQEV_02GRZJ }}
-          TOKEN_VD2EYQEV_WNSI2I: ${{ secrets.HF_TOKEN_VD2EYQEV_WNSI2I }}
-          TOKEN_HASIBXX2X_FQY2GS: ${{ secrets.HF_TOKEN_HASIBXX2X_FQY2GS }}
-          TOKEN_HASIBXX2X_ISLOK9: ${{ secrets.HF_TOKEN_HASIBXX2X_ISLOK9 }}
-          TOKEN_HASIBXX2X_UI26XR: ${{ secrets.HF_TOKEN_HASIBXX2X_UI26XR }}
-          TOKEN_HASIBXX2X_J5NX7Q: ${{ secrets.HF_TOKEN_HASIBXX2X_J5NX7Q }}
-          TOKEN_HASIBXX2X_ABJRJT: ${{ secrets.HF_TOKEN_HASIBXX2X_ABJRJT }}
-          TOKEN_BDFBEFBH_NEM2ER: ${{ secrets.HF_TOKEN_BDFBEFBH_NEM2ER }}
-          TOKEN_BDFBEFBH_DLZ09F: ${{ secrets.HF_TOKEN_BDFBEFBH_DLZ09F }}
-          TOKEN_BDFBEFBH_DWYOO2: ${{ secrets.HF_TOKEN_BDFBEFBH_DWYOO2 }}
-          TOKEN_BDFBEFBH_TD2NNA: ${{ secrets.HF_TOKEN_BDFBEFBH_TD2NNA }}
-          TOKEN_BDFBEFBH_O7GZBP: ${{ secrets.HF_TOKEN_BDFBEFBH_O7GZBP }}
-          TOKEN_MUHAMMADSHAHALAMSHEIKH_CR2GSM: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_CR2GSM }}
-          TOKEN_MUHAMMADSHAHALAMSHEIKH_PRJGM2: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_PRJGM2 }}
-          TOKEN_MUHAMMADSHAHALAMSHEIKH_SLUYGU: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_SLUYGU }}
-          TOKEN_MUHAMMADSHAHALAMSHEIKH_D7499M: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_D7499M }}
-          TOKEN_MUHAMMADSHAHALAMSHEIKH_UBUR8H: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_UBUR8H }}
-          TOKEN_HTYJY6_JQ7PNB: ${{ secrets.HF_TOKEN_HTYJY6_JQ7PNB }}
-          TOKEN_HTYJY6_JNOWVI: ${{ secrets.HF_TOKEN_HTYJY6_JNOWVI }}
-          TOKEN_HTYJY6_VA5QVH: ${{ secrets.HF_TOKEN_HTYJY6_VA5QVH }}
-          TOKEN_HTYJY6_DOEZ38: ${{ secrets.HF_TOKEN_HTYJY6_DOEZ38 }}
-          TOKEN_HTYJY6_F3CRBC: ${{ secrets.HF_TOKEN_HTYJY6_F3CRBC }}
+          TOKEN_GFVBF_KLG1KS: ${{ secrets.HF_TOKEN_GFVBF_KLG1KS }}
+          TOKEN_GFVBF_JOHXI5: ${{ secrets.HF_TOKEN_GFVBF_JOHXI5 }}
+          TOKEN_GFVBF_7M07UX: ${{ secrets.HF_TOKEN_GFVBF_7M07UX }}
+          TOKEN_GFVBF_A47JG2: ${{ secrets.HF_TOKEN_GFVBF_A47JG2 }}
+          TOKEN_GFVBF_S04SYQ: ${{ secrets.HF_TOKEN_GFVBF_S04SYQ }}
+          TOKEN_GNBG_PTH6R5: ${{ secrets.HF_TOKEN_GNBG_PTH6R5 }}
+          TOKEN_GNBG_G3DWWK: ${{ secrets.HF_TOKEN_GNBG_G3DWWK }}
+          TOKEN_GNBG_8EXUJY: ${{ secrets.HF_TOKEN_GNBG_8EXUJY }}
+          TOKEN_GNBG_9M1WTH: ${{ secrets.HF_TOKEN_GNBG_9M1WTH }}
+          TOKEN_GNBG_GVLMA4: ${{ secrets.HF_TOKEN_GNBG_GVLMA4 }}
+          TOKEN_J6GEP5ZD_J63LY0: ${{ secrets.HF_TOKEN_J6GEP5ZD_J63LY0 }}
+          TOKEN_J6GEP5ZD_UJSDVQ: ${{ secrets.HF_TOKEN_J6GEP5ZD_UJSDVQ }}
+          TOKEN_J6GEP5ZD_RFVX8R: ${{ secrets.HF_TOKEN_J6GEP5ZD_RFVX8R }}
+          TOKEN_J6GEP5ZD_71RL4V: ${{ secrets.HF_TOKEN_J6GEP5ZD_71RL4V }}
+          TOKEN_J6GEP5ZD_W0NUIV: ${{ secrets.HF_TOKEN_J6GEP5ZD_W0NUIV }}
+          TOKEN_MFLRJ8FO_8EG5G7: ${{ secrets.HF_TOKEN_MFLRJ8FO_8EG5G7 }}
+          TOKEN_MFLRJ8FO_BAK683: ${{ secrets.HF_TOKEN_MFLRJ8FO_BAK683 }}
+          TOKEN_MFLRJ8FO_A6989L: ${{ secrets.HF_TOKEN_MFLRJ8FO_A6989L }}
+          TOKEN_MFLRJ8FO_6M0CVL: ${{ secrets.HF_TOKEN_MFLRJ8FO_6M0CVL }}
+          TOKEN_MFLRJ8FO_TM0KO2: ${{ secrets.HF_TOKEN_MFLRJ8FO_TM0KO2 }}
+          TOKEN_84Q1HGYE_4MY39E: ${{ secrets.HF_TOKEN_84Q1HGYE_4MY39E }}
+          TOKEN_84Q1HGYE_XJVNHA: ${{ secrets.HF_TOKEN_84Q1HGYE_XJVNHA }}
+          TOKEN_84Q1HGYE_0BTJ72: ${{ secrets.HF_TOKEN_84Q1HGYE_0BTJ72 }}
+          TOKEN_84Q1HGYE_619ESP: ${{ secrets.HF_TOKEN_84Q1HGYE_619ESP }}
+          TOKEN_84Q1HGYE_9KVHN1: ${{ secrets.HF_TOKEN_84Q1HGYE_9KVHN1 }}
+          TOKEN_BWX2LINR_HV5WZO: ${{ secrets.HF_TOKEN_BWX2LINR_HV5WZO }}
+          TOKEN_BWX2LINR_EIR7TU: ${{ secrets.HF_TOKEN_BWX2LINR_EIR7TU }}
+          TOKEN_BWX2LINR_KCIQEQ: ${{ secrets.HF_TOKEN_BWX2LINR_KCIQEQ }}
+          TOKEN_BWX2LINR_4NA7Q2: ${{ secrets.HF_TOKEN_BWX2LINR_4NA7Q2 }}
+          TOKEN_BWX2LINR_VI9VZJ: ${{ secrets.HF_TOKEN_BWX2LINR_VI9VZJ }}
+          TOKEN_36MWOJIK_BTJ16R: ${{ secrets.HF_TOKEN_36MWOJIK_BTJ16R }}
+          TOKEN_36MWOJIK_D4DJMJ: ${{ secrets.HF_TOKEN_36MWOJIK_D4DJMJ }}
+          TOKEN_36MWOJIK_Q5MDL7: ${{ secrets.HF_TOKEN_36MWOJIK_Q5MDL7 }}
+          TOKEN_36MWOJIK_AG1JD0: ${{ secrets.HF_TOKEN_36MWOJIK_AG1JD0 }}
+          TOKEN_36MWOJIK_JUA339: ${{ secrets.HF_TOKEN_36MWOJIK_JUA339 }}
+          TOKEN_1CYZTRKJ_MLYRJF: ${{ secrets.HF_TOKEN_1CYZTRKJ_MLYRJF }}
+          TOKEN_1CYZTRKJ_LN0FZ2: ${{ secrets.HF_TOKEN_1CYZTRKJ_LN0FZ2 }}
+          TOKEN_1CYZTRKJ_BS9I35: ${{ secrets.HF_TOKEN_1CYZTRKJ_BS9I35 }}
+          TOKEN_1CYZTRKJ_UEH8KG: ${{ secrets.HF_TOKEN_1CYZTRKJ_UEH8KG }}
+          TOKEN_1CYZTRKJ_T5ALTU: ${{ secrets.HF_TOKEN_1CYZTRKJ_T5ALTU }}
+          TOKEN_GPB77DWS_S6Z106: ${{ secrets.HF_TOKEN_GPB77DWS_S6Z106 }}
+          TOKEN_GPB77DWS_49DABN: ${{ secrets.HF_TOKEN_GPB77DWS_49DABN }}
+          TOKEN_GPB77DWS_YQK1SO: ${{ secrets.HF_TOKEN_GPB77DWS_YQK1SO }}
+          TOKEN_GPB77DWS_KPCW0K: ${{ secrets.HF_TOKEN_GPB77DWS_KPCW0K }}
+          TOKEN_GPB77DWS_FURSNJ: ${{ secrets.HF_TOKEN_GPB77DWS_FURSNJ }}
+          TOKEN_RPFCG5XN_7U2UCB: ${{ secrets.HF_TOKEN_RPFCG5XN_7U2UCB }}
+          TOKEN_RPFCG5XN_65CJO4: ${{ secrets.HF_TOKEN_RPFCG5XN_65CJO4 }}
+          TOKEN_RPFCG5XN_SQZ268: ${{ secrets.HF_TOKEN_RPFCG5XN_SQZ268 }}
+          TOKEN_RPFCG5XN_4DBFJ7: ${{ secrets.HF_TOKEN_RPFCG5XN_4DBFJ7 }}
+          TOKEN_RPFCG5XN_X2SQWC: ${{ secrets.HF_TOKEN_RPFCG5XN_X2SQWC }}
+          TOKEN_VD2EYQEV_W86Z7W: ${{ secrets.HF_TOKEN_VD2EYQEV_W86Z7W }}
+          TOKEN_VD2EYQEV_THX93R: ${{ secrets.HF_TOKEN_VD2EYQEV_THX93R }}
+          TOKEN_VD2EYQEV_1AM8OC: ${{ secrets.HF_TOKEN_VD2EYQEV_1AM8OC }}
+          TOKEN_VD2EYQEV_SYWXX3: ${{ secrets.HF_TOKEN_VD2EYQEV_SYWXX3 }}
+          TOKEN_VD2EYQEV_ZKHXVY: ${{ secrets.HF_TOKEN_VD2EYQEV_ZKHXVY }}
+          TOKEN_HASIBXX2X_JM0FB1: ${{ secrets.HF_TOKEN_HASIBXX2X_JM0FB1 }}
+          TOKEN_HASIBXX2X_V5E1I9: ${{ secrets.HF_TOKEN_HASIBXX2X_V5E1I9 }}
+          TOKEN_HASIBXX2X_YV7W1Y: ${{ secrets.HF_TOKEN_HASIBXX2X_YV7W1Y }}
+          TOKEN_HASIBXX2X_8I1VO3: ${{ secrets.HF_TOKEN_HASIBXX2X_8I1VO3 }}
+          TOKEN_HASIBXX2X_PT9W8T: ${{ secrets.HF_TOKEN_HASIBXX2X_PT9W8T }}
+          TOKEN_BDFBEFBH_DSMWW0: ${{ secrets.HF_TOKEN_BDFBEFBH_DSMWW0 }}
+          TOKEN_BDFBEFBH_QEF4SS: ${{ secrets.HF_TOKEN_BDFBEFBH_QEF4SS }}
+          TOKEN_BDFBEFBH_TYY34V: ${{ secrets.HF_TOKEN_BDFBEFBH_TYY34V }}
+          TOKEN_BDFBEFBH_LARTE2: ${{ secrets.HF_TOKEN_BDFBEFBH_LARTE2 }}
+          TOKEN_BDFBEFBH_KOBYDY: ${{ secrets.HF_TOKEN_BDFBEFBH_KOBYDY }}
+          TOKEN_MUHAMMADSHAHALAMSHEIKH_RULIB7: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_RULIB7 }}
+          TOKEN_MUHAMMADSHAHALAMSHEIKH_P5J503: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_P5J503 }}
+          TOKEN_MUHAMMADSHAHALAMSHEIKH_5ZUY97: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_5ZUY97 }}
+          TOKEN_MUHAMMADSHAHALAMSHEIKH_CE2TFC: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_CE2TFC }}
+          TOKEN_MUHAMMADSHAHALAMSHEIKH_B72RG9: ${{ secrets.HF_TOKEN_MUHAMMADSHAHALAMSHEIKH_B72RG9 }}
+          TOKEN_HTYJY6_TASTQ2: ${{ secrets.HF_TOKEN_HTYJY6_TASTQ2 }}
+          TOKEN_HTYJY6_O06039: ${{ secrets.HF_TOKEN_HTYJY6_O06039 }}
+          TOKEN_HTYJY6_UH782V: ${{ secrets.HF_TOKEN_HTYJY6_UH782V }}
+          TOKEN_HTYJY6_RECT4Z: ${{ secrets.HF_TOKEN_HTYJY6_RECT4Z }}
+          TOKEN_HTYJY6_SA0VE5: ${{ secrets.HF_TOKEN_HTYJY6_SA0VE5 }}
 
           # URL List for GET Checks
           URLS: >
-            https://gfvbf-cea8ae.hf.space/health|TOKEN_GFVBF_CEA8AE
-            https://gfvbf-vdwfli.hf.space/health|TOKEN_GFVBF_VDWFLI
-            https://gfvbf-b7x4m3.hf.space/health|TOKEN_GFVBF_B7X4M3
-            https://gfvbf-9spern.hf.space/health|TOKEN_GFVBF_9SPERN
-            https://gfvbf-03hozu.hf.space/health|TOKEN_GFVBF_03HOZU
-            https://gnbg-1lhk7v.hf.space/health|TOKEN_GNBG_1LHK7V
-            https://gnbg-t0298y.hf.space/health|TOKEN_GNBG_T0298Y
-            https://gnbg-10d483.hf.space/health|TOKEN_GNBG_10D483
-            https://gnbg-41lc8y.hf.space/health|TOKEN_GNBG_41LC8Y
-            https://gnbg-8ztomz.hf.space/health|TOKEN_GNBG_8ZTOMZ
-            https://j6gep5zd-e1nfr8.hf.space/health|TOKEN_J6GEP5ZD_E1NFR8
-            https://j6gep5zd-97uvde.hf.space/health|TOKEN_J6GEP5ZD_97UVDE
-            https://j6gep5zd-iutw7w.hf.space/health|TOKEN_J6GEP5ZD_IUTW7W
-            https://j6gep5zd-v4v0vt.hf.space/health|TOKEN_J6GEP5ZD_V4V0VT
-            https://j6gep5zd-whklvj.hf.space/health|TOKEN_J6GEP5ZD_WHKLVJ
-            https://mflrj8fo-u3yi1k.hf.space/health|TOKEN_MFLRJ8FO_U3YI1K
-            https://mflrj8fo-r0py2x.hf.space/health|TOKEN_MFLRJ8FO_R0PY2X
-            https://mflrj8fo-qv3v2t.hf.space/health|TOKEN_MFLRJ8FO_QV3V2T
-            https://mflrj8fo-ngo6sj.hf.space/health|TOKEN_MFLRJ8FO_NGO6SJ
-            https://mflrj8fo-nteprv.hf.space/health|TOKEN_MFLRJ8FO_NTEPRV
-            https://84q1hgye-bflfl7.hf.space/health|TOKEN_84Q1HGYE_BFLFL7
-            https://84q1hgye-0mx2x4.hf.space/health|TOKEN_84Q1HGYE_0MX2X4
-            https://84q1hgye-ga9adj.hf.space/health|TOKEN_84Q1HGYE_GA9ADJ
-            https://84q1hgye-7klfui.hf.space/health|TOKEN_84Q1HGYE_7KLFUI
-            https://84q1hgye-9yj6mp.hf.space/health|TOKEN_84Q1HGYE_9YJ6MP
-            https://bwx2linr-xihbn0.hf.space/health|TOKEN_BWX2LINR_XIHBN0
-            https://bwx2linr-ls1gft.hf.space/health|TOKEN_BWX2LINR_LS1GFT
-            https://bwx2linr-b7ow00.hf.space/health|TOKEN_BWX2LINR_B7OW00
-            https://bwx2linr-kcayo8.hf.space/health|TOKEN_BWX2LINR_KCAYO8
-            https://bwx2linr-419zhv.hf.space/health|TOKEN_BWX2LINR_419ZHV
-            https://gpb77dws-s2jywf.hf.space/health|TOKEN_GPB77DWS_S2JYWF
-            https://gpb77dws-jawyr0.hf.space/health|TOKEN_GPB77DWS_JAWYR0
-            https://gpb77dws-lrs7i5.hf.space/health|TOKEN_GPB77DWS_LRS7I5
-            https://gpb77dws-b5sgqu.hf.space/health|TOKEN_GPB77DWS_B5SGQU
-            https://gpb77dws-b4s0k3.hf.space/health|TOKEN_GPB77DWS_B4S0K3
-            https://rpfcg5xn-f5duox.hf.space/health|TOKEN_RPFCG5XN_F5DUOX
-            https://rpfcg5xn-jwnuyp.hf.space/health|TOKEN_RPFCG5XN_JWNUYP
-            https://rpfcg5xn-t3xkgz.hf.space/health|TOKEN_RPFCG5XN_T3XKGZ
-            https://rpfcg5xn-nt60xe.hf.space/health|TOKEN_RPFCG5XN_NT60XE
-            https://rpfcg5xn-4ahqze.hf.space/health|TOKEN_RPFCG5XN_4AHQZE
-            https://vd2eyqev-44uyps.hf.space/health|TOKEN_VD2EYQEV_44UYPS
-            https://vd2eyqev-46qbcs.hf.space/health|TOKEN_VD2EYQEV_46QBCS
-            https://vd2eyqev-8ml5ca.hf.space/health|TOKEN_VD2EYQEV_8ML5CA
-            https://vd2eyqev-02grzj.hf.space/health|TOKEN_VD2EYQEV_02GRZJ
-            https://vd2eyqev-wnsi2i.hf.space/health|TOKEN_VD2EYQEV_WNSI2I
-            https://hasibxx2x-fqy2gs.hf.space/health|TOKEN_HASIBXX2X_FQY2GS
-            https://hasibxx2x-islok9.hf.space/health|TOKEN_HASIBXX2X_ISLOK9
-            https://hasibxx2x-ui26xr.hf.space/health|TOKEN_HASIBXX2X_UI26XR
-            https://hasibxx2x-j5nx7q.hf.space/health|TOKEN_HASIBXX2X_J5NX7Q
-            https://hasibxx2x-abjrjt.hf.space/health|TOKEN_HASIBXX2X_ABJRJT
-            https://bdfbefbh-nem2er.hf.space/health|TOKEN_BDFBEFBH_NEM2ER
-            https://bdfbefbh-dlz09f.hf.space/health|TOKEN_BDFBEFBH_DLZ09F
-            https://bdfbefbh-dwyoo2.hf.space/health|TOKEN_BDFBEFBH_DWYOO2
-            https://bdfbefbh-td2nna.hf.space/health|TOKEN_BDFBEFBH_TD2NNA
-            https://bdfbefbh-o7gzbp.hf.space/health|TOKEN_BDFBEFBH_O7GZBP
-            https://muhammadshahalamsheikh-cr2gsm.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_CR2GSM
-            https://muhammadshahalamsheikh-prjgm2.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_PRJGM2
-            https://muhammadshahalamsheikh-sluygu.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_SLUYGU
-            https://muhammadshahalamsheikh-d7499m.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_D7499M
-            https://muhammadshahalamsheikh-ubur8h.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_UBUR8H
-            https://htyjy6-jq7pnb.hf.space/health|TOKEN_HTYJY6_JQ7PNB
-            https://htyjy6-jnowvi.hf.space/health|TOKEN_HTYJY6_JNOWVI
-            https://htyjy6-va5qvh.hf.space/health|TOKEN_HTYJY6_VA5QVH
-            https://htyjy6-doez38.hf.space/health|TOKEN_HTYJY6_DOEZ38
-            https://htyjy6-f3crbc.hf.space/health|TOKEN_HTYJY6_F3CRBC
-          
-          # URL List for POST Checks (Gemini Cookies)
-          POST_URLS: >
-            https://mflrj8fo-u3yi1k.hf.space/cookies|TOKEN_MFLRJ8FO_U3YI1K|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://mflrj8fo-r0py2x.hf.space/cookies|TOKEN_MFLRJ8FO_R0PY2X|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://mflrj8fo-qv3v2t.hf.space/cookies|TOKEN_MFLRJ8FO_QV3V2T|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://mflrj8fo-ngo6sj.hf.space/cookies|TOKEN_MFLRJ8FO_NGO6SJ|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://mflrj8fo-nteprv.hf.space/cookies|TOKEN_MFLRJ8FO_NTEPRV|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-bflfl7.hf.space/cookies|TOKEN_84Q1HGYE_BFLFL7|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-0mx2x4.hf.space/cookies|TOKEN_84Q1HGYE_0MX2X4|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-ga9adj.hf.space/cookies|TOKEN_84Q1HGYE_GA9ADJ|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-7klfui.hf.space/cookies|TOKEN_84Q1HGYE_7KLFUI|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://84q1hgye-9yj6mp.hf.space/cookies|TOKEN_84Q1HGYE_9YJ6MP|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-xihbn0.hf.space/cookies|TOKEN_BWX2LINR_XIHBN0|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-ls1gft.hf.space/cookies|TOKEN_BWX2LINR_LS1GFT|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-b7ow00.hf.space/cookies|TOKEN_BWX2LINR_B7OW00|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-kcayo8.hf.space/cookies|TOKEN_BWX2LINR_KCAYO8|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-            https://bwx2linr-419zhv.hf.space/cookies|TOKEN_BWX2LINR_419ZHV|{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}
-        
+            https://gfvbf-klg1ks.hf.space/health|TOKEN_GFVBF_KLG1KS
+            https://gfvbf-johxi5.hf.space/health|TOKEN_GFVBF_JOHXI5
+            https://gfvbf-7m07ux.hf.space/health|TOKEN_GFVBF_7M07UX
+            https://gfvbf-a47jg2.hf.space/health|TOKEN_GFVBF_A47JG2
+            https://gfvbf-s04syq.hf.space/health|TOKEN_GFVBF_S04SYQ
+            https://gnbg-pth6r5.hf.space/health|TOKEN_GNBG_PTH6R5
+            https://gnbg-g3dwwk.hf.space/health|TOKEN_GNBG_G3DWWK
+            https://gnbg-8exujy.hf.space/health|TOKEN_GNBG_8EXUJY
+            https://gnbg-9m1wth.hf.space/health|TOKEN_GNBG_9M1WTH
+            https://gnbg-gvlma4.hf.space/health|TOKEN_GNBG_GVLMA4
+            https://j6gep5zd-j63ly0.hf.space/health|TOKEN_J6GEP5ZD_J63LY0
+            https://j6gep5zd-ujsdvq.hf.space/health|TOKEN_J6GEP5ZD_UJSDVQ
+            https://j6gep5zd-rfvx8r.hf.space/health|TOKEN_J6GEP5ZD_RFVX8R
+            https://j6gep5zd-71rl4v.hf.space/health|TOKEN_J6GEP5ZD_71RL4V
+            https://j6gep5zd-w0nuiv.hf.space/health|TOKEN_J6GEP5ZD_W0NUIV
+            https://mflrj8fo-8eg5g7.hf.space/health|TOKEN_MFLRJ8FO_8EG5G7
+            https://mflrj8fo-bak683.hf.space/health|TOKEN_MFLRJ8FO_BAK683
+            https://mflrj8fo-a6989l.hf.space/health|TOKEN_MFLRJ8FO_A6989L
+            https://mflrj8fo-6m0cvl.hf.space/health|TOKEN_MFLRJ8FO_6M0CVL
+            https://mflrj8fo-tm0ko2.hf.space/health|TOKEN_MFLRJ8FO_TM0KO2
+            https://84q1hgye-4my39e.hf.space/health|TOKEN_84Q1HGYE_4MY39E
+            https://84q1hgye-xjvnha.hf.space/health|TOKEN_84Q1HGYE_XJVNHA
+            https://84q1hgye-0btj72.hf.space/health|TOKEN_84Q1HGYE_0BTJ72
+            https://84q1hgye-619esp.hf.space/health|TOKEN_84Q1HGYE_619ESP
+            https://84q1hgye-9kvhn1.hf.space/health|TOKEN_84Q1HGYE_9KVHN1
+            https://bwx2linr-hv5wzo.hf.space/health|TOKEN_BWX2LINR_HV5WZO
+            https://bwx2linr-eir7tu.hf.space/health|TOKEN_BWX2LINR_EIR7TU
+            https://bwx2linr-kciqeq.hf.space/health|TOKEN_BWX2LINR_KCIQEQ
+            https://bwx2linr-4na7q2.hf.space/health|TOKEN_BWX2LINR_4NA7Q2
+            https://bwx2linr-vi9vzj.hf.space/health|TOKEN_BWX2LINR_VI9VZJ
+            https://36mwojik-btj16r.hf.space/health|TOKEN_36MWOJIK_BTJ16R
+            https://36mwojik-d4djmj.hf.space/health|TOKEN_36MWOJIK_D4DJMJ
+            https://36mwojik-q5mdl7.hf.space/health|TOKEN_36MWOJIK_Q5MDL7
+            https://36mwojik-ag1jd0.hf.space/health|TOKEN_36MWOJIK_AG1JD0
+            https://36mwojik-jua339.hf.space/health|TOKEN_36MWOJIK_JUA339
+            https://1cyztrkj-mlyrjf.hf.space/health|TOKEN_1CYZTRKJ_MLYRJF
+            https://1cyztrkj-ln0fz2.hf.space/health|TOKEN_1CYZTRKJ_LN0FZ2
+            https://1cyztrkj-bs9i35.hf.space/health|TOKEN_1CYZTRKJ_BS9I35
+            https://1cyztrkj-ueh8kg.hf.space/health|TOKEN_1CYZTRKJ_UEH8KG
+            https://1cyztrkj-t5altu.hf.space/health|TOKEN_1CYZTRKJ_T5ALTU
+            https://gpb77dws-s6z106.hf.space/health|TOKEN_GPB77DWS_S6Z106
+            https://gpb77dws-49dabn.hf.space/health|TOKEN_GPB77DWS_49DABN
+            https://gpb77dws-yqk1so.hf.space/health|TOKEN_GPB77DWS_YQK1SO
+            https://gpb77dws-kpcw0k.hf.space/health|TOKEN_GPB77DWS_KPCW0K
+            https://gpb77dws-fursnj.hf.space/health|TOKEN_GPB77DWS_FURSNJ
+            https://rpfcg5xn-7u2ucb.hf.space/health|TOKEN_RPFCG5XN_7U2UCB
+            https://rpfcg5xn-65cjo4.hf.space/health|TOKEN_RPFCG5XN_65CJO4
+            https://rpfcg5xn-sqz268.hf.space/health|TOKEN_RPFCG5XN_SQZ268
+            https://rpfcg5xn-4dbfj7.hf.space/health|TOKEN_RPFCG5XN_4DBFJ7
+            https://rpfcg5xn-x2sqwc.hf.space/health|TOKEN_RPFCG5XN_X2SQWC
+            https://vd2eyqev-w86z7w.hf.space/health|TOKEN_VD2EYQEV_W86Z7W
+            https://vd2eyqev-thx93r.hf.space/health|TOKEN_VD2EYQEV_THX93R
+            https://vd2eyqev-1am8oc.hf.space/health|TOKEN_VD2EYQEV_1AM8OC
+            https://vd2eyqev-sywxx3.hf.space/health|TOKEN_VD2EYQEV_SYWXX3
+            https://vd2eyqev-zkhxvy.hf.space/health|TOKEN_VD2EYQEV_ZKHXVY
+            https://hasibxx2x-jm0fb1.hf.space/health|TOKEN_HASIBXX2X_JM0FB1
+            https://hasibxx2x-v5e1i9.hf.space/health|TOKEN_HASIBXX2X_V5E1I9
+            https://hasibxx2x-yv7w1y.hf.space/health|TOKEN_HASIBXX2X_YV7W1Y
+            https://hasibxx2x-8i1vo3.hf.space/health|TOKEN_HASIBXX2X_8I1VO3
+            https://hasibxx2x-pt9w8t.hf.space/health|TOKEN_HASIBXX2X_PT9W8T
+            https://bdfbefbh-dsmww0.hf.space/health|TOKEN_BDFBEFBH_DSMWW0
+            https://bdfbefbh-qef4ss.hf.space/health|TOKEN_BDFBEFBH_QEF4SS
+            https://bdfbefbh-tyy34v.hf.space/health|TOKEN_BDFBEFBH_TYY34V
+            https://bdfbefbh-larte2.hf.space/health|TOKEN_BDFBEFBH_LARTE2
+            https://bdfbefbh-kobydy.hf.space/health|TOKEN_BDFBEFBH_KOBYDY
+            https://muhammadshahalamsheikh-rulib7.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_RULIB7
+            https://muhammadshahalamsheikh-p5j503.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_P5J503
+            https://muhammadshahalamsheikh-5zuy97.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_5ZUY97
+            https://muhammadshahalamsheikh-ce2tfc.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_CE2TFC
+            https://muhammadshahalamsheikh-b72rg9.hf.space/health|TOKEN_MUHAMMADSHAHALAMSHEIKH_B72RG9
+            https://htyjy6-tastq2.hf.space/health|TOKEN_HTYJY6_TASTQ2
+            https://htyjy6-o06039.hf.space/health|TOKEN_HTYJY6_O06039
+            https://htyjy6-uh782v.hf.space/health|TOKEN_HTYJY6_UH782V
+            https://htyjy6-rect4z.hf.space/health|TOKEN_HTYJY6_RECT4Z
+            https://htyjy6-sa0ve5.hf.space/health|TOKEN_HTYJY6_SA0VE5
         run: |
           get_token() {
             var_name=$1
@@ -170,11 +171,11 @@ jobs:
           }
 
           echo "🚀 Starting Parallel GET Checks (Max 20 concurrently)..."
-          
+
           process_get() {
             entry=$1
             if [ -z "$entry" ]; then return; fi
-            
+
             url="${entry%|*}"
             token_var="${entry#*|}"
 
@@ -184,7 +185,7 @@ jobs:
               token=$(get_token "$token_var")
               STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 -H "Authorization: Bearer $token" "$url")
             fi
-            
+
             if [[ "$STATUS" =~ ^(200|405|401)$ ]]; then
                echo "✅ GET OK ($STATUS): $url"
             else
@@ -194,9 +195,9 @@ jobs:
 
           export -f process_get
           export -f get_token
-          
+
           MAX_PARALLEL=20
-          
+
           for entry in $URLS; do
             process_get "$entry" &
             while [ "$(jobs -r | wc -l)" -ge "$MAX_PARALLEL" ]; do
@@ -205,89 +206,5 @@ jobs:
           done
           wait
 
-          # ------------------------------------------------------------
-          
-          echo -e "\n🚀 Starting STRICTLY SERIAL Cookies Checks..."
-          
-          process_post() {
-            entry=$1
-            if [ -z "$entry" ]; then return; fi
-            
-            url=$(echo "$entry" | cut -d'|' -f1)
-            token_var=$(echo "$entry" | cut -d'|' -f2)
-            payload='{}' 
-
-            token=$(get_token "$token_var")
-            
-            # Using very safe flags. 
-            # -f (fail) is avoided because we handle HTTP codes.
-            # Timeout extended to 3 min (180s) to tolerate deep Playwright delays
-            RESP=$(curl -s -S -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
-                 -H "Authorization: Bearer $token" \
-                 -d "$payload" --max-time 180 --connect-timeout 20 "$url" 2>&1)
-            
-            STATUS=$(echo "$RESP" | tail -n 1)
-            BODY=$(echo "$RESP" | head -n -1)
-
-            # Robust logging
-            if [[ "$STATUS" == "200" ]]; then
-               echo "✅ COOKIE OK (200): $url"
-               echo "   Result: $BODY"
-            else
-               # Catch non-numeric error states too (like curl 28 timeout code)
-               if [[ ! "$STATUS" =~ ^[0-9]+$ ]]; then
-                   echo "❌ NET ERROR: $url - $RESP"
-               else
-                   echo "❌ FAIL ($STATUS): $url"
-                   echo "   Reason: ${BODY:0:300}..."
-               fi
-            fi
-          }
-          
-          # NO & backgrounding. Plain standard loop.
-          if [ -n "$POST_URLS" ]; then
-              for entry in $POST_URLS; do
-                process_post "$entry"
-              done
-          fi
-          
-          # ------------------------------------------------------------
-          # SINGLE RANDOM GENERATION CALL
-          # ------------------------------------------------------------
-          echo -e "\n🎲 Selecting ONE Random Gemini Space for Full Generation..."
-          
-          GEMINI_CANDIDATES=("https://mflrj8fo-u3yi1k.hf.space/generate|TOKEN_MFLRJ8FO_U3YI1K" "https://mflrj8fo-r0py2x.hf.space/generate|TOKEN_MFLRJ8FO_R0PY2X" "https://mflrj8fo-qv3v2t.hf.space/generate|TOKEN_MFLRJ8FO_QV3V2T" "https://mflrj8fo-ngo6sj.hf.space/generate|TOKEN_MFLRJ8FO_NGO6SJ" "https://mflrj8fo-nteprv.hf.space/generate|TOKEN_MFLRJ8FO_NTEPRV" "https://84q1hgye-bflfl7.hf.space/generate|TOKEN_84Q1HGYE_BFLFL7" "https://84q1hgye-0mx2x4.hf.space/generate|TOKEN_84Q1HGYE_0MX2X4" "https://84q1hgye-ga9adj.hf.space/generate|TOKEN_84Q1HGYE_GA9ADJ" "https://84q1hgye-7klfui.hf.space/generate|TOKEN_84Q1HGYE_7KLFUI" "https://84q1hgye-9yj6mp.hf.space/generate|TOKEN_84Q1HGYE_9YJ6MP" "https://bwx2linr-xihbn0.hf.space/generate|TOKEN_BWX2LINR_XIHBN0" "https://bwx2linr-ls1gft.hf.space/generate|TOKEN_BWX2LINR_LS1GFT" "https://bwx2linr-b7ow00.hf.space/generate|TOKEN_BWX2LINR_B7OW00" "https://bwx2linr-kcayo8.hf.space/generate|TOKEN_BWX2LINR_KCAYO8" "https://bwx2linr-419zhv.hf.space/generate|TOKEN_BWX2LINR_419ZHV")
-          
-          if [ ${#GEMINI_CANDIDATES[@]} -gt 0 ]; then
-             # Pick random index
-             RAND_INDEX=$(( RANDOM % ${#GEMINI_CANDIDATES[@]} ))
-             SELECTED="${GEMINI_CANDIDATES[$RAND_INDEX]}"
-             
-             url="${SELECTED%|*}"
-             token_var="${SELECTED#*|}"
-             token=$(get_token "$token_var")
-             
-             echo "🎯 Selected: $url"
-             
-             # Call /generate with payload
-             payload='{"user_prompt":"hi","system_prompt":"keep-alive","config":"auto"}'
-             
-             RESP=$(curl -s -w "\n%{http_code}" -X POST -H "Content-Type: application/json" \
-                 -H "Authorization: Bearer $token" \
-                 -d "$payload" --max-time 60 "$url")
-                 
-             STATUS=$(echo "$RESP" | tail -n 1)
-             BODY=$(echo "$RESP" | head -n -1)
-             
-             if [ "$STATUS" -eq 200 ]; then
-               echo "✅ GEN SUCCESS (200):"
-               echo "$BODY"
-             else
-               echo "❌ GEN FAILED ($STATUS):"
-               echo "$BODY"
-             fi
-          else
-             echo "⚠️ No Gemini spaces found."
-          fi
-          
-          echo -e "\n✨ Keep Alive Complete."
+          echo -e "
+✨ Keep Alive (GET only) Complete."
