@@ -87,138 +87,171 @@ jobs:
           TOKEN_HTYJY6_9CX97W: ${{ secrets.HF_TOKEN_HTYJY6_9CX97W }}
           TOKEN_HTYJY6_XDC5UC: ${{ secrets.HF_TOKEN_HTYJY6_XDC5UC }}
         run: |
+          # Create temp directory for results
+          RESULTS_DIR=$(mktemp -d)
+          TOTAL=75
+          
           echo "========================================"
           echo "🚀 Starting GET /health checks"
-          echo "   Total endpoints: 75"
+          echo "   Total endpoints: $TOTAL"
           echo "   Parallel: 5 at a time"
           echo "========================================"
           echo ""
 
-          curl_check() {
-            url="$1"
-            token="$2"
-
+          check_url() {
+            local url="$1"
+            local token="$2"
+            local idx="$3"
+            local result_file="$RESULTS_DIR/$idx.txt"
+            
             if [ -n "$token" ]; then
-              code=$(curl -s -o /dev/null -w "%{http_code}" -m 30 -H "Authorization: Bearer $token" "$url")
+              code=$(curl -s -o /dev/null -w "%{http_code}" -m 60 -H "Authorization: Bearer $token" "$url" 2>/dev/null || echo "000")
             else
-              code=$(curl -s -o /dev/null -w "%{http_code}" -m 30 "$url")
+              code=$(curl -s -o /dev/null -w "%{http_code}" -m 60 "$url" 2>/dev/null || echo "000")
             fi
-
+            
             if [ "$code" = "200" ]; then
-              echo "✅ [200] $url"
-            elif [ "$code" = "401" ] || [ "$code" = "405" ]; then
-              echo "⚠️  [$code] $url (auth/method)"
+              echo "✅ [200] $url" >> "$result_file"
+            elif [ "$code" = "000" ]; then
+              echo "⏱️  [TIMEOUT] $url" >> "$result_file"
+            elif [ "$code" = "401" ] || [ "$code" = "403" ]; then
+              echo "🔐 [$code] $url" >> "$result_file"
+            elif [ "$code" = "404" ]; then
+              echo "🔍 [404] $url (not found)" >> "$result_file"
+            elif [ "$code" = "502" ] || [ "$code" = "503" ]; then
+              echo "😴 [$code] $url (sleeping/starting)" >> "$result_file"
             else
-              echo "❌ [$code] $url"
+              echo "❌ [$code] $url" >> "$result_file"
             fi
           }
+          
+          export -f check_url
+          export RESULTS_DIR
 
-          curl_check "https://gfvbf-pxew3z.hf.space/health" "$TOKEN_GFVBF_PXEW3Z" &
-          curl_check "https://gfvbf-8x38cn.hf.space/health" "$TOKEN_GFVBF_8X38CN" &
-          curl_check "https://gfvbf-62n757.hf.space/health" "$TOKEN_GFVBF_62N757" &
-          curl_check "https://gfvbf-p0ad5i.hf.space/health" "$TOKEN_GFVBF_P0AD5I" &
-          curl_check "https://gfvbf-o48hzf.hf.space/health" "$TOKEN_GFVBF_O48HZF" &
+          check_url "https://gfvbf-pxew3z.hf.space/health" "$TOKEN_GFVBF_PXEW3Z" 0 &
+          check_url "https://gfvbf-8x38cn.hf.space/health" "$TOKEN_GFVBF_8X38CN" 1 &
+          check_url "https://gfvbf-62n757.hf.space/health" "$TOKEN_GFVBF_62N757" 2 &
+          check_url "https://gfvbf-p0ad5i.hf.space/health" "$TOKEN_GFVBF_P0AD5I" 3 &
+          check_url "https://gfvbf-o48hzf.hf.space/health" "$TOKEN_GFVBF_O48HZF" 4 &
           wait
-
-          curl_check "https://gnbg-lrqggs.hf.space/health" "$TOKEN_GNBG_LRQGGS" &
-          curl_check "https://gnbg-j6yof1.hf.space/health" "$TOKEN_GNBG_J6YOF1" &
-          curl_check "https://gnbg-o2mz6r.hf.space/health" "$TOKEN_GNBG_O2MZ6R" &
-          curl_check "https://gnbg-u7zd9g.hf.space/health" "$TOKEN_GNBG_U7ZD9G" &
-          curl_check "https://gnbg-14e5k7.hf.space/health" "$TOKEN_GNBG_14E5K7" &
+          check_url "https://gnbg-lrqggs.hf.space/health" "$TOKEN_GNBG_LRQGGS" 5 &
+          check_url "https://gnbg-j6yof1.hf.space/health" "$TOKEN_GNBG_J6YOF1" 6 &
+          check_url "https://gnbg-o2mz6r.hf.space/health" "$TOKEN_GNBG_O2MZ6R" 7 &
+          check_url "https://gnbg-u7zd9g.hf.space/health" "$TOKEN_GNBG_U7ZD9G" 8 &
+          check_url "https://gnbg-14e5k7.hf.space/health" "$TOKEN_GNBG_14E5K7" 9 &
           wait
-
-          curl_check "https://j6gep5zd-o93sit.hf.space/health" "$TOKEN_J6GEP5ZD_O93SIT" &
-          curl_check "https://j6gep5zd-e92ndh.hf.space/health" "$TOKEN_J6GEP5ZD_E92NDH" &
-          curl_check "https://j6gep5zd-no055x.hf.space/health" "$TOKEN_J6GEP5ZD_NO055X" &
-          curl_check "https://j6gep5zd-is90ci.hf.space/health" "$TOKEN_J6GEP5ZD_IS90CI" &
-          curl_check "https://j6gep5zd-5erq3j.hf.space/health" "$TOKEN_J6GEP5ZD_5ERQ3J" &
+          check_url "https://j6gep5zd-o93sit.hf.space/health" "$TOKEN_J6GEP5ZD_O93SIT" 10 &
+          check_url "https://j6gep5zd-e92ndh.hf.space/health" "$TOKEN_J6GEP5ZD_E92NDH" 11 &
+          check_url "https://j6gep5zd-no055x.hf.space/health" "$TOKEN_J6GEP5ZD_NO055X" 12 &
+          check_url "https://j6gep5zd-is90ci.hf.space/health" "$TOKEN_J6GEP5ZD_IS90CI" 13 &
+          check_url "https://j6gep5zd-5erq3j.hf.space/health" "$TOKEN_J6GEP5ZD_5ERQ3J" 14 &
           wait
-
-          curl_check "https://mflrj8fo-askzsw.hf.space/health" "$TOKEN_MFLRJ8FO_ASKZSW" &
-          curl_check "https://mflrj8fo-ei08jm.hf.space/health" "$TOKEN_MFLRJ8FO_EI08JM" &
-          curl_check "https://mflrj8fo-uydpxq.hf.space/health" "$TOKEN_MFLRJ8FO_UYDPXQ" &
-          curl_check "https://mflrj8fo-s6tusu.hf.space/health" "$TOKEN_MFLRJ8FO_S6TUSU" &
-          curl_check "https://mflrj8fo-z20kla.hf.space/health" "$TOKEN_MFLRJ8FO_Z20KLA" &
+          check_url "https://mflrj8fo-askzsw.hf.space/health" "$TOKEN_MFLRJ8FO_ASKZSW" 15 &
+          check_url "https://mflrj8fo-ei08jm.hf.space/health" "$TOKEN_MFLRJ8FO_EI08JM" 16 &
+          check_url "https://mflrj8fo-uydpxq.hf.space/health" "$TOKEN_MFLRJ8FO_UYDPXQ" 17 &
+          check_url "https://mflrj8fo-s6tusu.hf.space/health" "$TOKEN_MFLRJ8FO_S6TUSU" 18 &
+          check_url "https://mflrj8fo-z20kla.hf.space/health" "$TOKEN_MFLRJ8FO_Z20KLA" 19 &
           wait
-
-          curl_check "https://84q1hgye-v3m4o8.hf.space/health" "$TOKEN_84Q1HGYE_V3M4O8" &
-          curl_check "https://84q1hgye-ce5aao.hf.space/health" "$TOKEN_84Q1HGYE_CE5AAO" &
-          curl_check "https://84q1hgye-igsnsp.hf.space/health" "$TOKEN_84Q1HGYE_IGSNSP" &
-          curl_check "https://84q1hgye-soxaaq.hf.space/health" "$TOKEN_84Q1HGYE_SOXAAQ" &
-          curl_check "https://84q1hgye-83g5ou.hf.space/health" "$TOKEN_84Q1HGYE_83G5OU" &
+          check_url "https://84q1hgye-v3m4o8.hf.space/health" "$TOKEN_84Q1HGYE_V3M4O8" 20 &
+          check_url "https://84q1hgye-ce5aao.hf.space/health" "$TOKEN_84Q1HGYE_CE5AAO" 21 &
+          check_url "https://84q1hgye-igsnsp.hf.space/health" "$TOKEN_84Q1HGYE_IGSNSP" 22 &
+          check_url "https://84q1hgye-soxaaq.hf.space/health" "$TOKEN_84Q1HGYE_SOXAAQ" 23 &
+          check_url "https://84q1hgye-83g5ou.hf.space/health" "$TOKEN_84Q1HGYE_83G5OU" 24 &
           wait
-
-          curl_check "https://bwx2linr-hvxbm2.hf.space/health" "$TOKEN_BWX2LINR_HVXBM2" &
-          curl_check "https://bwx2linr-avu0ms.hf.space/health" "$TOKEN_BWX2LINR_AVU0MS" &
-          curl_check "https://bwx2linr-y0w0el.hf.space/health" "$TOKEN_BWX2LINR_Y0W0EL" &
-          curl_check "https://bwx2linr-97t9ox.hf.space/health" "$TOKEN_BWX2LINR_97T9OX" &
-          curl_check "https://bwx2linr-gt71e0.hf.space/health" "$TOKEN_BWX2LINR_GT71E0" &
+          check_url "https://bwx2linr-hvxbm2.hf.space/health" "$TOKEN_BWX2LINR_HVXBM2" 25 &
+          check_url "https://bwx2linr-avu0ms.hf.space/health" "$TOKEN_BWX2LINR_AVU0MS" 26 &
+          check_url "https://bwx2linr-y0w0el.hf.space/health" "$TOKEN_BWX2LINR_Y0W0EL" 27 &
+          check_url "https://bwx2linr-97t9ox.hf.space/health" "$TOKEN_BWX2LINR_97T9OX" 28 &
+          check_url "https://bwx2linr-gt71e0.hf.space/health" "$TOKEN_BWX2LINR_GT71E0" 29 &
           wait
-
-          curl_check "https://36mwojik-jao5zm.hf.space/health" "$TOKEN_36MWOJIK_JAO5ZM" &
-          curl_check "https://36mwojik-nrntt9.hf.space/health" "$TOKEN_36MWOJIK_NRNTT9" &
-          curl_check "https://36mwojik-gmvvr5.hf.space/health" "$TOKEN_36MWOJIK_GMVVR5" &
-          curl_check "https://36mwojik-14dsyr.hf.space/health" "$TOKEN_36MWOJIK_14DSYR" &
-          curl_check "https://36mwojik-le8z3o.hf.space/health" "$TOKEN_36MWOJIK_LE8Z3O" &
+          check_url "https://36mwojik-jao5zm.hf.space/health" "$TOKEN_36MWOJIK_JAO5ZM" 30 &
+          check_url "https://36mwojik-nrntt9.hf.space/health" "$TOKEN_36MWOJIK_NRNTT9" 31 &
+          check_url "https://36mwojik-gmvvr5.hf.space/health" "$TOKEN_36MWOJIK_GMVVR5" 32 &
+          check_url "https://36mwojik-14dsyr.hf.space/health" "$TOKEN_36MWOJIK_14DSYR" 33 &
+          check_url "https://36mwojik-le8z3o.hf.space/health" "$TOKEN_36MWOJIK_LE8Z3O" 34 &
           wait
-
-          curl_check "https://1cyztrkj-lfe6ad.hf.space/health" "$TOKEN_1CYZTRKJ_LFE6AD" &
-          curl_check "https://1cyztrkj-50i15g.hf.space/health" "$TOKEN_1CYZTRKJ_50I15G" &
-          curl_check "https://1cyztrkj-0w9y8r.hf.space/health" "$TOKEN_1CYZTRKJ_0W9Y8R" &
-          curl_check "https://1cyztrkj-gj2s6o.hf.space/health" "$TOKEN_1CYZTRKJ_GJ2S6O" &
-          curl_check "https://1cyztrkj-6wxusj.hf.space/health" "$TOKEN_1CYZTRKJ_6WXUSJ" &
+          check_url "https://1cyztrkj-lfe6ad.hf.space/health" "$TOKEN_1CYZTRKJ_LFE6AD" 35 &
+          check_url "https://1cyztrkj-50i15g.hf.space/health" "$TOKEN_1CYZTRKJ_50I15G" 36 &
+          check_url "https://1cyztrkj-0w9y8r.hf.space/health" "$TOKEN_1CYZTRKJ_0W9Y8R" 37 &
+          check_url "https://1cyztrkj-gj2s6o.hf.space/health" "$TOKEN_1CYZTRKJ_GJ2S6O" 38 &
+          check_url "https://1cyztrkj-6wxusj.hf.space/health" "$TOKEN_1CYZTRKJ_6WXUSJ" 39 &
           wait
-
-          curl_check "https://gpb77dws-wwe4pa.hf.space/health" "$TOKEN_GPB77DWS_WWE4PA" &
-          curl_check "https://gpb77dws-b25drs.hf.space/health" "$TOKEN_GPB77DWS_B25DRS" &
-          curl_check "https://gpb77dws-f16n7m.hf.space/health" "$TOKEN_GPB77DWS_F16N7M" &
-          curl_check "https://gpb77dws-ddkjce.hf.space/health" "$TOKEN_GPB77DWS_DDKJCE" &
-          curl_check "https://gpb77dws-iy0bk7.hf.space/health" "$TOKEN_GPB77DWS_IY0BK7" &
+          check_url "https://gpb77dws-wwe4pa.hf.space/health" "$TOKEN_GPB77DWS_WWE4PA" 40 &
+          check_url "https://gpb77dws-b25drs.hf.space/health" "$TOKEN_GPB77DWS_B25DRS" 41 &
+          check_url "https://gpb77dws-f16n7m.hf.space/health" "$TOKEN_GPB77DWS_F16N7M" 42 &
+          check_url "https://gpb77dws-ddkjce.hf.space/health" "$TOKEN_GPB77DWS_DDKJCE" 43 &
+          check_url "https://gpb77dws-iy0bk7.hf.space/health" "$TOKEN_GPB77DWS_IY0BK7" 44 &
           wait
-
-          curl_check "https://rpfcg5xn-90p1hb.hf.space/health" "$TOKEN_RPFCG5XN_90P1HB" &
-          curl_check "https://rpfcg5xn-dsv4pl.hf.space/health" "$TOKEN_RPFCG5XN_DSV4PL" &
-          curl_check "https://rpfcg5xn-t8bejd.hf.space/health" "$TOKEN_RPFCG5XN_T8BEJD" &
-          curl_check "https://rpfcg5xn-b7u6qy.hf.space/health" "$TOKEN_RPFCG5XN_B7U6QY" &
-          curl_check "https://rpfcg5xn-oajzte.hf.space/health" "$TOKEN_RPFCG5XN_OAJZTE" &
+          check_url "https://rpfcg5xn-90p1hb.hf.space/health" "$TOKEN_RPFCG5XN_90P1HB" 45 &
+          check_url "https://rpfcg5xn-dsv4pl.hf.space/health" "$TOKEN_RPFCG5XN_DSV4PL" 46 &
+          check_url "https://rpfcg5xn-t8bejd.hf.space/health" "$TOKEN_RPFCG5XN_T8BEJD" 47 &
+          check_url "https://rpfcg5xn-b7u6qy.hf.space/health" "$TOKEN_RPFCG5XN_B7U6QY" 48 &
+          check_url "https://rpfcg5xn-oajzte.hf.space/health" "$TOKEN_RPFCG5XN_OAJZTE" 49 &
           wait
-
-          curl_check "https://vd2eyqev-mx10dt.hf.space/health" "$TOKEN_VD2EYQEV_MX10DT" &
-          curl_check "https://vd2eyqev-zj6dwm.hf.space/health" "$TOKEN_VD2EYQEV_ZJ6DWM" &
-          curl_check "https://vd2eyqev-sqllum.hf.space/health" "$TOKEN_VD2EYQEV_SQLLUM" &
-          curl_check "https://vd2eyqev-a8oagi.hf.space/health" "$TOKEN_VD2EYQEV_A8OAGI" &
-          curl_check "https://vd2eyqev-yh4e2p.hf.space/health" "$TOKEN_VD2EYQEV_YH4E2P" &
+          check_url "https://vd2eyqev-mx10dt.hf.space/health" "$TOKEN_VD2EYQEV_MX10DT" 50 &
+          check_url "https://vd2eyqev-zj6dwm.hf.space/health" "$TOKEN_VD2EYQEV_ZJ6DWM" 51 &
+          check_url "https://vd2eyqev-sqllum.hf.space/health" "$TOKEN_VD2EYQEV_SQLLUM" 52 &
+          check_url "https://vd2eyqev-a8oagi.hf.space/health" "$TOKEN_VD2EYQEV_A8OAGI" 53 &
+          check_url "https://vd2eyqev-yh4e2p.hf.space/health" "$TOKEN_VD2EYQEV_YH4E2P" 54 &
           wait
-
-          curl_check "https://hasibxx2x-6q401w.hf.space/health" "$TOKEN_HASIBXX2X_6Q401W" &
-          curl_check "https://hasibxx2x-6ci7om.hf.space/health" "$TOKEN_HASIBXX2X_6CI7OM" &
-          curl_check "https://hasibxx2x-ccd3vm.hf.space/health" "$TOKEN_HASIBXX2X_CCD3VM" &
-          curl_check "https://hasibxx2x-z3f3i1.hf.space/health" "$TOKEN_HASIBXX2X_Z3F3I1" &
-          curl_check "https://hasibxx2x-xwi3bm.hf.space/health" "$TOKEN_HASIBXX2X_XWI3BM" &
+          check_url "https://hasibxx2x-6q401w.hf.space/health" "$TOKEN_HASIBXX2X_6Q401W" 55 &
+          check_url "https://hasibxx2x-6ci7om.hf.space/health" "$TOKEN_HASIBXX2X_6CI7OM" 56 &
+          check_url "https://hasibxx2x-ccd3vm.hf.space/health" "$TOKEN_HASIBXX2X_CCD3VM" 57 &
+          check_url "https://hasibxx2x-z3f3i1.hf.space/health" "$TOKEN_HASIBXX2X_Z3F3I1" 58 &
+          check_url "https://hasibxx2x-xwi3bm.hf.space/health" "$TOKEN_HASIBXX2X_XWI3BM" 59 &
           wait
-
-          curl_check "https://bdfbefbh-9cwole.hf.space/health" "$TOKEN_BDFBEFBH_9CWOLE" &
-          curl_check "https://bdfbefbh-kaia86.hf.space/health" "$TOKEN_BDFBEFBH_KAIA86" &
-          curl_check "https://bdfbefbh-cq66lo.hf.space/health" "$TOKEN_BDFBEFBH_CQ66LO" &
-          curl_check "https://bdfbefbh-q0sb78.hf.space/health" "$TOKEN_BDFBEFBH_Q0SB78" &
-          curl_check "https://bdfbefbh-2f2ds2.hf.space/health" "$TOKEN_BDFBEFBH_2F2DS2" &
+          check_url "https://bdfbefbh-9cwole.hf.space/health" "$TOKEN_BDFBEFBH_9CWOLE" 60 &
+          check_url "https://bdfbefbh-kaia86.hf.space/health" "$TOKEN_BDFBEFBH_KAIA86" 61 &
+          check_url "https://bdfbefbh-cq66lo.hf.space/health" "$TOKEN_BDFBEFBH_CQ66LO" 62 &
+          check_url "https://bdfbefbh-q0sb78.hf.space/health" "$TOKEN_BDFBEFBH_Q0SB78" 63 &
+          check_url "https://bdfbefbh-2f2ds2.hf.space/health" "$TOKEN_BDFBEFBH_2F2DS2" 64 &
           wait
-
-          curl_check "https://muhammadshahalamsheikh-v4q1a2.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_V4Q1A2" &
-          curl_check "https://muhammadshahalamsheikh-ksv1o4.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_KSV1O4" &
-          curl_check "https://muhammadshahalamsheikh-2rwaot.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_2RWAOT" &
-          curl_check "https://muhammadshahalamsheikh-dyl966.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_DYL966" &
-          curl_check "https://muhammadshahalamsheikh-l12j62.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_L12J62" &
+          check_url "https://muhammadshahalamsheikh-v4q1a2.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_V4Q1A2" 65 &
+          check_url "https://muhammadshahalamsheikh-ksv1o4.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_KSV1O4" 66 &
+          check_url "https://muhammadshahalamsheikh-2rwaot.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_2RWAOT" 67 &
+          check_url "https://muhammadshahalamsheikh-dyl966.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_DYL966" 68 &
+          check_url "https://muhammadshahalamsheikh-l12j62.hf.space/health" "$TOKEN_MUHAMMADSHAHALAMSHEIKH_L12J62" 69 &
           wait
-
-          curl_check "https://htyjy6-ms654y.hf.space/health" "$TOKEN_HTYJY6_MS654Y" &
-          curl_check "https://htyjy6-atcbqh.hf.space/health" "$TOKEN_HTYJY6_ATCBQH" &
-          curl_check "https://htyjy6-98r96b.hf.space/health" "$TOKEN_HTYJY6_98R96B" &
-          curl_check "https://htyjy6-9cx97w.hf.space/health" "$TOKEN_HTYJY6_9CX97W" &
-          curl_check "https://htyjy6-xdc5uc.hf.space/health" "$TOKEN_HTYJY6_XDC5UC" &
+          check_url "https://htyjy6-ms654y.hf.space/health" "$TOKEN_HTYJY6_MS654Y" 70 &
+          check_url "https://htyjy6-atcbqh.hf.space/health" "$TOKEN_HTYJY6_ATCBQH" 71 &
+          check_url "https://htyjy6-98r96b.hf.space/health" "$TOKEN_HTYJY6_98R96B" 72 &
+          check_url "https://htyjy6-9cx97w.hf.space/health" "$TOKEN_HTYJY6_9CX97W" 73 &
+          check_url "https://htyjy6-xdc5uc.hf.space/health" "$TOKEN_HTYJY6_XDC5UC" 74 &
           wait
 
           echo ""
           echo "========================================"
-          echo "✨ All health checks complete!"
+          echo "📊 RESULTS:"
           echo "========================================"
+          
+          # Print all results in order
+          for i in $(seq 0 $(($TOTAL - 1))); do
+            if [ -f "$RESULTS_DIR/$i.txt" ]; then
+              cat "$RESULTS_DIR/$i.txt"
+            else
+              echo "⚠️  [NO RESULT] Check $i failed"
+            fi
+          done
+          
+          # Count results
+          SUCCESS=$(grep -l "✅" $RESULTS_DIR/*.txt 2>/dev/null | wc -l)
+          FAILED=$(grep -l "❌" $RESULTS_DIR/*.txt 2>/dev/null | wc -l)
+          TIMEOUT=$(grep -l "⏱️" $RESULTS_DIR/*.txt 2>/dev/null | wc -l)
+          NOTFOUND=$(grep -l "🔍" $RESULTS_DIR/*.txt 2>/dev/null | wc -l)
+          SLEEPING=$(grep -l "😴" $RESULTS_DIR/*.txt 2>/dev/null | wc -l)
+          
+          echo ""
+          echo "========================================"
+          echo "📈 SUMMARY:"
+          echo "   ✅ Success:  $SUCCESS"
+          echo "   😴 Sleeping: $SLEEPING"
+          echo "   🔍 Not Found: $NOTFOUND"
+          echo "   ⏱️  Timeout:  $TIMEOUT"
+          echo "   ❌ Failed:   $FAILED"
+          echo "   📊 Total:    $TOTAL"
+          echo "========================================"
+          
+          # Cleanup
+          rm -rf "$RESULTS_DIR"
+          
+          echo "✨ All health checks complete!"
