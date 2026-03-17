@@ -43,8 +43,8 @@ jobs:
           TOKEN_OL7AW5WH_HGKQ4S: ${{ secrets.HF_TOKEN_OL7AW5WH_HGKQ4S }}
           TOKEN_MFLRJ8FO_M51871: ${{ secrets.HF_TOKEN_MFLRJ8FO_M51871 }}
           TOKEN_MFLRJ8FO_WM6OLL: ${{ secrets.HF_TOKEN_MFLRJ8FO_WM6OLL }}
-          TOKEN_MFLRJ8FO_ON2F7X: ${{ secrets.HF_TOKEN_MFLRJ8FO_ON2F7X }}
           TOKEN_MFLRJ8FO_OBHQ74: ${{ secrets.HF_TOKEN_MFLRJ8FO_OBHQ74 }}
+          TOKEN_MFLRJ8FO_ON2F7X: ${{ secrets.HF_TOKEN_MFLRJ8FO_ON2F7X }}
           TOKEN_MFLRJ8FO_MGUNXV: ${{ secrets.HF_TOKEN_MFLRJ8FO_MGUNXV }}
           TOKEN_84Q1HGYE_N0PUBB: ${{ secrets.HF_TOKEN_84Q1HGYE_N0PUBB }}
           TOKEN_84Q1HGYE_YS7KXR: ${{ secrets.HF_TOKEN_84Q1HGYE_YS7KXR }}
@@ -176,8 +176,8 @@ jobs:
           wait
           check_url "https://mflrj8fo-m51871.hf.space/health" "$TOKEN_MFLRJ8FO_M51871" 30 &
           check_url "https://mflrj8fo-wm6oll.hf.space/health" "$TOKEN_MFLRJ8FO_WM6OLL" 31 &
-          check_url "https://mflrj8fo-on2f7x.hf.space/health" "$TOKEN_MFLRJ8FO_ON2F7X" 32 &
-          check_url "https://mflrj8fo-obhq74.hf.space/health" "$TOKEN_MFLRJ8FO_OBHQ74" 33 &
+          check_url "https://mflrj8fo-obhq74.hf.space/health" "$TOKEN_MFLRJ8FO_OBHQ74" 32 &
+          check_url "https://mflrj8fo-on2f7x.hf.space/health" "$TOKEN_MFLRJ8FO_ON2F7X" 33 &
           check_url "https://mflrj8fo-mgunxv.hf.space/health" "$TOKEN_MFLRJ8FO_MGUNXV" 34 &
           wait
           check_url "https://84q1hgye-n0pubb.hf.space/health" "$TOKEN_84Q1HGYE_N0PUBB" 35 &
